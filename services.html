@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dịch Vụ Du Lịch Quảng Trị | Explore Quảng Trị</title>
+  <meta name="description" content="Thông tin liên hệ khách sạn, nhà hàng, thuê xe, hướng dẫn viên và công ty tour tại Quảng Trị.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .page-hero { background: linear-gradient(135deg, #2c3e50, #34495e); padding: 100px 0 60px; text-align: center; color: #fff; }
+    .page-hero h1 { color: #fff; margin-bottom: 12px; }
+    .page-hero p { color: rgba(255,255,255,.85); }
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
+    .service-card { padding: 22px; }
+    .service-type-label { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--primary); margin-bottom: 8px; }
+    .service-name { font-size: 1.05rem; font-weight: 700; margin-bottom: 12px; }
+    .service-contact-list { list-style: none; }
+    .service-contact-list li { display: flex; align-items: flex-start; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: .84rem; color: var(--text-muted); }
+    .service-contact-list li:last-child { border-bottom: none; }
+    .service-contact-list li .icon { color: var(--primary); min-width: 18px; text-align: center; margin-top: 1px; }
+    .service-contact-list a { color: var(--primary); font-weight: 600; }
+    .rating-stars { color: #f5b865; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+  </style>
+</head>
+<body class="page-normal">
+
+<nav class="navbar" id="navbar">
+  <a href="index.html" class="navbar-brand">
+    <div class="navbar-logo">🗺️</div>
+    <div class="navbar-name">Explore<span>Quảng Trị</span></div>
+  </a>
+  <div class="navbar-nav" id="navMenu">
+    <a href="index.html"             class="nav-link">🏠 Trang Chủ</a>
+    <a href="destinations.html"      class="nav-link">📍 Địa Điểm</a>
+    <a href="itinerary.html"         class="nav-link">📅 Lộ Trình</a>
+    <a href="services.html"          class="nav-link active">🛎️ Dịch Vụ</a>
+    <a href="index.html#tips-section" class="nav-link">💡 Lưu ý & Chuẩn bị</a>
+  </div>
+  <a href="index.html#planner-section" class="btn btn-accent btn-sm navbar-cta">
+    <i class="fas fa-magic"></i> Lập kế hoạch
+  </a>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+</nav>
+
+<div class="page-hero">
+  <div class="container">
+    <div class="hero-badge" style="display:inline-flex;margin-bottom:16px;"><i class="fas fa-concierge-bell"></i> Dịch Vụ Du Lịch</div>
+    <h1>Dịch Vụ & Liên Hệ</h1>
+    <p>Thông tin liên hệ các dịch vụ du lịch tại Quảng Trị — khách sạn, nhà hàng, thuê xe, hướng dẫn viên</p>
+  </div>
+</div>
+
+<div class="container section-sm">
+  <!-- Important Notice -->
+  <div style="background:rgba(212,148,58,.1);border:1px solid rgba(212,148,58,.4);border-radius:var(--radius);padding:16px 20px;margin-bottom:32px;display:flex;gap:14px;align-items:flex-start;">
+    <span style="font-size:1.4rem;">ℹ️</span>
+    <div>
+      <strong>Lưu ý:</strong> Website cung cấp thông tin liên hệ tham khảo. Vui lòng liên hệ trực tiếp với đơn vị dịch vụ để xác nhận giá, lịch, sự sẵn có trước khi đặt. Thông tin có thể thay đổi.
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="services-tabs" id="servicesTabs">
+    <div class="service-tab active" data-tab="stays">🏨 Lưu Trú</div>
+    <div class="service-tab" data-tab="restaurants">🍜 Ẩm Thực</div>
+    <div class="service-tab" data-tab="transport">🚗 Vận Chuyển</div>
+    <div class="service-tab" data-tab="guides">👤 HDV & Tour</div>
+  </div>
+
+  <!-- Stays -->
+  <div class="tab-content active" id="tab-stays">
+    <div style="margin-bottom:20px;">
+      <h3>Khách sạn & Resort & Homestay</h3>
+      <p style="color:var(--text-muted);font-size:.9rem;">Từ budget đến cao cấp, phù hợp mọi ngân sách</p>
+    </div>
+    <div class="services-grid" id="staysGrid"></div>
+  </div>
+
+  <!-- Restaurants -->
+  <div class="tab-content" id="tab-restaurants">
+    <div style="margin-bottom:20px;">
+      <h3>Nhà Hàng & Quán Ăn</h3>
+      <p style="color:var(--text-muted);font-size:.9rem;">Ẩm thực đặc sắc miền Trung và hải sản tươi ngon</p>
+    </div>
+    <div class="services-grid" id="restaurantsGrid"></div>
+
+    <!-- Local food highlight -->
+    <div style="background:var(--bg);border-radius:var(--radius);padding:28px;margin-top:32px;">
+      <h3 style="margin-bottom:16px;">🍜 Đặc Sản Không Thể Bỏ Qua</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;">
+        ${[
+          {name:'Bún Bò Quảng Trị',desc:'Nhẹ hơn Huế, ít sả, thêm đặc sản riêng',icon:'🥣'},
+          {name:'Hải sản Cửa Việt',desc:'Tôm, cua, mực, cá tươi sống từ biển',icon:'🦀'},
+          {name:'Bánh ướt Quảng Trị',desc:'Mỏng, mịn, ăn kèm thịt heo nướng',icon:'🫓'},
+          {name:'Cà phê Khe Sanh',desc:'Đặc sản cao nguyên, hương vị độc đáo',icon:'☕'},
+          {name:'Mắm Cửa Tùng',desc:'Mắm nêm nổi tiếng cả nước',icon:'🫙'},
+          {name:'Rượu cần Pa Kô',desc:'Rượu truyền thống dân tộc vùng núi',icon:'🍶'},
+        ].map(item => `
+          <div style="display:flex;gap:12px;align-items:flex-start;background:var(--bg-card);padding:14px;border-radius:var(--radius-sm);">
+            <span style="font-size:1.6rem;">${item.icon}</span>
+            <div>
+              <div style="font-weight:700;font-size:.9rem;">${item.name}</div>
+              <div style="font-size:.8rem;color:var(--text-muted);">${item.desc}</div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  </div>
+
+  <!-- Transport -->
+  <div class="tab-content" id="tab-transport">
+    <div style="margin-bottom:20px;">
+      <h3>Vận Chuyển & Thuê Xe</h3>
+      <p style="color:var(--text-muted);font-size:.9rem;">Taxi, thuê xe máy, ô tô và tàu ra đảo</p>
+    </div>
+    <div class="services-grid" id="transportGrid"></div>
+
+    <!-- How to get there -->
+    <div style="background:var(--bg);border-radius:var(--radius);padding:28px;margin-top:32px;">
+      <h3 style="margin-bottom:20px;">🚌 Cách Đến Quảng Trị</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;">
+        <div style="background:var(--bg-card);padding:20px;border-radius:var(--radius-sm);">
+          <div style="font-size:1.8rem;margin-bottom:10px;">✈️</div>
+          <div style="font-weight:700;margin-bottom:8px;">Máy bay</div>
+          <p style="font-size:.85rem;color:var(--text-muted);">Bay đến sân bay Đồng Hới (Quảng Trị) hoặc Đà Nẵng, sau đó thuê xe vào Đông Hà (60–90km).</p>
+        </div>
+        <div style="background:var(--bg-card);padding:20px;border-radius:var(--radius-sm);">
+          <div style="font-size:1.8rem;margin-bottom:10px;">🚂</div>
+          <div style="font-weight:700;margin-bottom:8px;">Tàu hỏa</div>
+          <p style="font-size:.85rem;color:var(--text-muted);">Ga Đông Hà là điểm dừng của tất cả tàu Bắc–Nam. Từ Hà Nội ~8h, từ TP.HCM ~15h, từ Đà Nẵng ~2.5h.</p>
+        </div>
+        <div style="background:var(--bg-card);padding:20px;border-radius:var(--radius-sm);">
+          <div style="font-size:1.8rem;margin-bottom:10px;">🚌</div>
+          <div style="font-weight:700;margin-bottom:8px;">Xe khách</div>
+          <p style="font-size:.85rem;color:var(--text-muted);">Nhiều nhà xe chạy tuyến Hà Nội–Đông Hà và TP.HCM–Đông Hà. Giường nằm, giá ~200–350k. Bến xe Đông Hà là điểm đến.</p>
+        </div>
+        <div style="background:var(--bg-card);padding:20px;border-radius:var(--radius-sm);">
+          <div style="font-size:1.8rem;margin-bottom:10px;">🏍️</div>
+          <div style="font-weight:700;margin-bottom:8px;">Xe máy / Phượt</div>
+          <p style="font-size:.85rem;color:var(--text-muted);">Quảng Trị nằm trên Quốc lộ 1A và đường Hồ Chí Minh — lý tưởng cho các biker. Dừng nghỉ tại Đông Hà trước khi tiếp tục.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Guides -->
+  <div class="tab-content" id="tab-guides">
+    <div style="margin-bottom:20px;">
+      <h3>Hướng Dẫn Viên & Công Ty Tour</h3>
+      <p style="color:var(--text-muted);font-size:.9rem;">HDV địa phương am hiểu lịch sử và công ty tour uy tín</p>
+    </div>
+    <div class="services-grid" id="guidesGrid"></div>
+
+    <!-- Why local guide -->
+    <div style="background:rgba(26,107,92,.06);border:1px solid rgba(26,107,92,.2);border-radius:var(--radius);padding:24px;margin-top:32px;">
+      <h4 style="margin-bottom:12px;">🎯 Tại sao nên thuê hướng dẫn viên địa phương?</h4>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;font-size:.875rem;">
+        <div style="display:flex;gap:10px;">✅ <span>Câu chuyện lịch sử sống động mà sách không có</span></div>
+        <div style="display:flex;gap:10px;">✅ <span>Biết quán ăn ngon, giá hợp lý không trên Google</span></div>
+        <div style="display:flex;gap:10px;">✅ <span>Hiểu địa hình và điều kiện thực tế tại điểm đến</span></div>
+        <div style="display:flex;gap:10px;">✅ <span>Hỗ trợ ngôn ngữ và văn hóa địa phương</span></div>
+        <div style="display:flex;gap:10px;">✅ <span>Tối ưu lịch trình tránh giờ cao điểm đông khách</span></div>
+        <div style="display:flex;gap:10px;">✅ <span>Góp phần phát triển kinh tế địa phương</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer style="background:var(--text);color:rgba(255,255,255,.7);text-align:center;padding:24px;font-size:.85rem;margin-top:48px;">
+  <div>© 2025 ExploreQuảngTrị.com · <a href="index.html" style="color:var(--accent-light);">Trang chủ</a> · <a href="map.html" style="color:var(--accent-light);">Bản đồ</a></div>
+</footer>
+
+<script src="js/data.js"></script>
+<script>
+  window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY>10));
+  function toggleMenu() { document.getElementById('navMenu').classList.toggle('open'); }
+
+  function renderStars(r) { return '<span class="rating-stars">' + '★'.repeat(Math.floor(r||0)) + '</span>'; }
+
+  function renderStays() {
+    document.getElementById('staysGrid').innerHTML = services.stays.map(s => `
+      <div class="card service-card">
+        <div class="service-type-label">🏨 ${s.type}</div>
+        <div class="service-name">${s.name}</div>
+        <div style="font-size:.82rem;margin-bottom:10px;">${renderStars(s.rating)} ${s.rating}</div>
+        <ul class="service-contact-list">
+          <li><span class="icon"><i class="fas fa-map-marker-alt"></i></span>${s.address}</li>
+          <li><span class="icon"><i class="fas fa-phone"></i></span><a href="tel:${s.phone}">${s.phone}</a></li>
+          ${s.email?`<li><span class="icon"><i class="fas fa-envelope"></i></span><a href="mailto:${s.email}">${s.email}</a></li>`:''}
+          ${s.website?`<li><span class="icon"><i class="fas fa-globe"></i></span><a href="https://${s.website}" target="_blank">${s.website}</a></li>`:''}
+          <li><span class="icon"><i class="fas fa-tag"></i></span>${s.priceRange}</li>
+          <li><span class="icon"><i class="fas fa-clock"></i></span>${s.hours}</li>
+        </ul>
+        ${s.amenities?`<div style="margin-top:12px;display:flex;gap:5px;flex-wrap:wrap;">${s.amenities.map(a=>`<span class="tag">${a}</span>`).join('')}</div>`:''}
+        <p style="font-size:.82rem;color:var(--text-muted);margin-top:10px;">${s.description}</p>
+      </div>
+    `).join('');
+  }
+
+  function renderRestaurants() {
+    document.getElementById('restaurantsGrid').innerHTML = services.restaurants.map(r => `
+      <div class="card service-card">
+        <div class="service-type-label">🍜 ${r.type}</div>
+        <div class="service-name">${r.name}</div>
+        <div style="font-size:.82rem;margin-bottom:10px;">${renderStars(r.rating)} ${r.rating}</div>
+        <ul class="service-contact-list">
+          <li><span class="icon"><i class="fas fa-map-marker-alt"></i></span>${r.address}</li>
+          <li><span class="icon"><i class="fas fa-phone"></i></span><a href="tel:${r.phone}">${r.phone}</a></li>
+          <li><span class="icon"><i class="fas fa-tag"></i></span>${r.priceRange}</li>
+          <li><span class="icon"><i class="fas fa-clock"></i></span>${r.hours}</li>
+        </ul>
+        ${r.specialties?`<div style="margin-top:10px;"><div style="font-size:.75rem;font-weight:700;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px;">Đặc sản</div><div style="display:flex;gap:5px;flex-wrap:wrap;">${r.specialties.map(s=>`<span class="tag">${s}</span>`).join('')}</div></div>`:''}
+        <p style="font-size:.82rem;color:var(--text-muted);margin-top:10px;">${r.description}</p>
+      </div>
+    `).join('');
+  }
+
+  function renderTransport() {
+    document.getElementById('transportGrid').innerHTML = services.transport.map(t => `
+      <div class="card service-card">
+        <div class="service-type-label">🚗 ${t.type}</div>
+        <div class="service-name">${t.name}</div>
+        <ul class="service-contact-list">
+          ${t.address?`<li><span class="icon"><i class="fas fa-map-marker-alt"></i></span>${t.address}</li>`:''}
+          <li><span class="icon"><i class="fas fa-phone"></i></span><a href="tel:${t.phone}">${t.phone}</a></li>
+          ${t.email?`<li><span class="icon"><i class="fas fa-envelope"></i></span><a href="mailto:${t.email}">${t.email}</a></li>`:''}
+          <li><span class="icon"><i class="fas fa-tag"></i></span>${t.priceRange}</li>
+          <li><span class="icon"><i class="fas fa-clock"></i></span>${t.hours}</li>
+        </ul>
+        ${t.vehicles?`<div style="margin-top:10px;"><div style="font-size:.75rem;font-weight:700;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px;">Phương tiện</div><div style="display:flex;gap:5px;flex-wrap:wrap;">${t.vehicles.map(v=>`<span class="tag">${v}</span>`).join('')}</div></div>`:''}
+        <p style="font-size:.82rem;color:var(--text-muted);margin-top:10px;">${t.description}</p>
+      </div>
+    `).join('');
+  }
+
+  function renderGuides() {
+    document.getElementById('guidesGrid').innerHTML = services.guides.map(g => `
+      <div class="card service-card">
+        <div class="service-type-label">👤 ${g.type}</div>
+        <div class="service-name">${g.name}</div>
+        ${g.rating?`<div style="font-size:.82rem;margin-bottom:10px;">${renderStars(g.rating)} ${g.rating} · ${g.experience||''}</div>`:''}
+        <ul class="service-contact-list">
+          ${g.address?`<li><span class="icon"><i class="fas fa-map-marker-alt"></i></span>${g.address}</li>`:''}
+          <li><span class="icon"><i class="fas fa-phone"></i></span><a href="tel:${g.phone}">${g.phone}</a></li>
+          ${g.email?`<li><span class="icon"><i class="fas fa-envelope"></i></span><a href="mailto:${g.email}">${g.email}</a></li>`:''}
+          ${g.website?`<li><span class="icon"><i class="fas fa-globe"></i></span><a href="https://${g.website}" target="_blank">${g.website}</a></li>`:''}
+          <li><span class="icon"><i class="fas fa-tag"></i></span>${g.priceRange}</li>
+          ${g.hours?`<li><span class="icon"><i class="fas fa-clock"></i></span>${g.hours}</li>`:''}
+        </ul>
+        ${g.languages?`<div style="margin-top:10px;"><div style="font-size:.75rem;font-weight:700;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px;">Ngôn ngữ</div><div style="display:flex;gap:5px;flex-wrap:wrap;">${g.languages.map(l=>`<span class="tag">${l}</span>`).join('')}</div></div>`:''}
+        ${g.specialties?`<div style="margin-top:8px;"><div style="font-size:.75rem;font-weight:700;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px;">Chuyên môn</div><div style="display:flex;gap:5px;flex-wrap:wrap;">${g.specialties.map(s=>`<span class="tag">${s}</span>`).join('')}</div></div>`:''}
+        <p style="font-size:.82rem;color:var(--text-muted);margin-top:10px;">${g.description}</p>
+      </div>
+    `).join('');
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    renderStays(); renderRestaurants(); renderTransport(); renderGuides();
+
+    document.querySelectorAll('.service-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.service-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+      });
+    });
+
+    const params = new URLSearchParams(window.location.search);
+    const tab = params.get('tab');
+    if (tab) {
+      const tabEl = document.querySelector(`.service-tab[data-tab="${tab}"]`);
+      if (tabEl) tabEl.click();
+    }
+  });
+</script>
+</body>
+</html>

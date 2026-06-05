@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Địa Điểm Du Lịch Quảng Trị | Explore Quảng Trị</title>
+  <meta name="description" content="Khám phá hơn 50 địa điểm du lịch Quảng Trị: di tích lịch sử, hang động, biển đảo, tâm linh với thông tin chi tiết và hình ảnh thực tế.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+/* ─────────────────────────────────────────────────────────
+   HERO SLIDESHOW
+───────────────────────────────────────────────────────── */
+.hero-slideshow {
+  position: relative; width: 100%; height: 560px; overflow: hidden;
+  background: #0a0a1a;
+}
+@media (max-width:768px) { .hero-slideshow { height: 70vh; min-height: 380px; } }
+
+.slide {
+  position: absolute; inset: 0;
+  opacity: 0; transition: opacity .9s ease;
+  display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end;
+  padding: 60px 7%;
+}
+.slide.active { opacity: 1; }
+
+.slide-bg {
+  position: absolute; inset: 0; background-size: cover; background-position: center;
+  transform: scale(1.04); transition: transform 6s ease;
+}
+.slide.active .slide-bg { transform: scale(1); }
+.slide-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,.85) 0%, rgba(0,0,0,.4) 45%, rgba(0,0,0,.1) 100%);
+}
+.slide-content { position: relative; z-index: 2; max-width: 640px; }
+.slide-region {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.25);
+  color: rgba(255,255,255,.9); padding: 5px 14px; border-radius: 100px;
+  font-size: .72rem; font-weight: 700; margin-bottom: 14px; backdrop-filter: blur(8px);
+}
+.slide-title {
+  font-size: clamp(1.8rem, 5vw, 3rem); font-weight: 900;
+  color: #fff; line-height: 1.15; margin-bottom: 10px;
+}
+.slide-tagline { color: rgba(255,255,255,.8); font-size: clamp(.85rem,2vw,1.05rem); margin-bottom: 20px; line-height: 1.6; }
+.slide-badges { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+.slide-badge {
+  font-size: .7rem; font-weight: 700; padding: 4px 12px;
+  background: rgba(255,255,255,.18); color: #fff;
+  border-radius: 100px; border: 1px solid rgba(255,255,255,.3);
+}
+.slide-btn-detail {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #f5a623; color: #fff; font-weight: 800; font-size: .9rem;
+  padding: 12px 28px; border-radius: 100px; cursor: pointer; border: none;
+  font-family: inherit; transition: all .2s;
+}
+.slide-btn-detail:hover { background: #e09416; transform: translateY(-2px); }
+
+/* Navigation arrows */
+.slide-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 10;
+  width: 48px; height: 48px; border-radius: 50%;
+  background: rgba(255,255,255,.15); backdrop-filter: blur(8px);
+  border: 1.5px solid rgba(255,255,255,.25); color: #fff;
+  font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background .2s;
+}
+.slide-arrow:hover { background: rgba(255,255,255,.3); }
+.slide-arrow.prev { left: 24px; }
+.slide-arrow.next { right: 24px; }
+
+/* Dots */
+.slide-dots {
+  position: absolute; bottom: 24px; right: 7%; z-index: 10;
+  display: flex; gap: 8px; align-items: center;
+}
+.slide-dot {
+  width: 8px; height: 8px; border-radius: 100px; border: none; cursor: pointer;
+  background: rgba(255,255,255,.4); transition: all .3s; padding: 0;
+}
+.slide-dot.active { background: #f5a623; width: 24px; }
+
+/* Progress bar */
+.slide-progress {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+  background: rgba(255,255,255,.1); z-index: 10;
+}
+.slide-progress-fill {
+  height: 100%; background: #f5a623; width: 0%;
+  transition: width 5s linear;
+}
+
+/* ─────────────────────────────────────────────────────────
+   FILTER BAR
+───────────────────────────────────────────────────────── */
+.filter-bar {
+  position: sticky; top: 64px; z-index: 100;
+  background: rgba(var(--c-bg-rgb, 248,249,252),.97);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--c-border);
+  padding: 0;
+}
+.filter-bar-inner {
+  display: flex; flex-direction: column; gap: 0;
+  max-width: 1200px; margin: 0 auto; padding: 0 24px;
+}
+
+/* Row 1: search + sort + count */
+.filter-row1 {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 0 10px; border-bottom: 1px solid var(--c-border);
+  flex-wrap: wrap;
+}
+.filter-search {
+  display: flex; align-items: center; gap: 9px;
+  flex: 1; min-width: 200px;
+  background: var(--c-surface); border: 1.5px solid var(--c-border);
+  border-radius: 100px; padding: 8px 16px;
+}
+.filter-search i { color: var(--c-muted); font-size: .85rem; }
+.filter-search input {
+  border: none; background: none; outline: none; font-size: .875rem;
+  font-family: inherit; color: var(--c-text); width: 100%;
+}
+.dest-count { font-size: .78rem; color: var(--c-muted); white-space: nowrap; }
+.sort-sel {
+  padding: 8px 12px; border: 1.5px solid var(--c-border);
+  border-radius: 100px; font-size: .78rem; font-family: inherit;
+  background: var(--c-surface); color: var(--c-text); cursor: pointer; outline: none;
+}
+
+/* Row 2: region tabs + category pills */
+.filter-row2 {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 0; overflow-x: auto; -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.filter-row2::-webkit-scrollbar { display: none; }
+
+.region-tab {
+  flex-shrink: 0; padding: 6px 16px; border-radius: 100px;
+  border: 1.5px solid var(--c-border); background: var(--c-surface);
+  font-size: .78rem; font-weight: 700; color: var(--c-muted);
+  cursor: pointer; font-family: inherit; transition: all .18s;
+}
+.region-tab:hover { border-color: var(--c-primary); color: var(--c-primary); }
+.region-tab.active {
+  background: var(--c-primary); border-color: var(--c-primary); color: #fff;
+}
+
+.filter-divider { width: 1px; height: 20px; background: var(--c-border); flex-shrink: 0; margin: 0 4px; }
+
+.cat-chip {
+  flex-shrink: 0; padding: 6px 14px; border-radius: 100px;
+  border: 1.5px solid var(--c-border); background: var(--c-surface);
+  font-size: .78rem; font-weight: 600; color: var(--c-muted);
+  cursor: pointer; font-family: inherit; transition: all .18s; display: flex; align-items: center; gap: 5px;
+}
+.cat-chip:hover { border-color: var(--c-primary); color: var(--c-primary); }
+.cat-chip.active {
+  background: var(--c-primary-faint); border-color: var(--c-primary); color: var(--c-primary);
+  font-weight: 700;
+}
+.cat-chip[data-cat="history"].active  { background: rgba(192,57,43,.1); border-color: #c0392b; color: #c0392b; }
+.cat-chip[data-cat="nature"].active   { background: rgba(39,174,96,.1); border-color: #27ae60; color: #27ae60; }
+.cat-chip[data-cat="beach"].active    { background: rgba(41,128,185,.1); border-color: #2980b9; color: #2980b9; }
+.cat-chip[data-cat="religion"].active { background: rgba(142,68,173,.1); border-color: #8e44ad; color: #8e44ad; }
+
+/* ─────────────────────────────────────────────────────────
+   DESTINATION CARDS (showcase style)
+───────────────────────────────────────────────────────── */
+.dest-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px; margin-top: 0;
+}
+@media (max-width:900px) { .dest-grid { grid-template-columns: repeat(2,1fr); } }
+@media (max-width:520px)  { .dest-grid { grid-template-columns: 1fr; gap: 12px; } }
+
+.dcard {
+  border-radius: 18px; overflow: hidden; cursor: pointer;
+  position: relative; min-height: 250px;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 22px 20px;
+  border: 2px solid transparent;
+  transition: transform .3s, box-shadow .3s, border-color .2s;
+  user-select: none;
+}
+.dcard:hover { transform: translateY(-5px); box-shadow: 0 20px 48px rgba(0,0,0,.4); }
+
+.dcard-img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; z-index: 0; opacity: 0;
+  transition: opacity 1s ease; border-radius: inherit;
+}
+.dcard-img.loaded { opacity: 1; }
+.dcard-overlay {
+  position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(to top, rgba(0,0,0,.82) 0%, rgba(0,0,0,.28) 55%, transparent 100%);
+}
+.dcard-top {
+  position: absolute; top: 14px; left: 14px; right: 14px; z-index: 3;
+  display: flex; align-items: flex-start; justify-content: space-between;
+}
+.dcard-cat {
+  font-size: .62rem; font-weight: 800; padding: 3px 10px; border-radius: 100px;
+  backdrop-filter: blur(8px); color: #fff;
+  background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.25);
+  text-transform: uppercase; letter-spacing: .04em;
+}
+.dcard-highlight {
+  font-size: .62rem; font-weight: 800; padding: 3px 10px; border-radius: 100px;
+  background: #f5a623; color: #fff;
+}
+.dcard-fav {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: rgba(0,0,0,.35); border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .9rem; transition: background .15s; flex-shrink: 0;
+}
+.dcard-fav:hover { background: rgba(0,0,0,.6); }
+
+.dcard-body { position: relative; z-index: 2; }
+.dcard-icon { font-size: 1.8rem; margin-bottom: 8px; }
+.dcard-name { font-size: 1rem; font-weight: 800; color: #fff; line-height: 1.25; margin-bottom: 5px; }
+.dcard-tagline { font-size: .73rem; color: rgba(255,255,255,.75); margin-bottom: 10px; line-height: 1.4; }
+.dcard-meta {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+.dcard-tag {
+  font-size: .62rem; font-weight: 700; padding: 3px 9px;
+  background: rgba(255,255,255,.18); color: #fff;
+  border-radius: 100px; border: 1px solid rgba(255,255,255,.25);
+}
+.dcard-tag.free { background: rgba(39,174,96,.4); border-color: rgba(39,174,96,.7); }
+.dcard-rating { font-size: .68rem; font-weight: 700; color: #f5a623; margin-left: auto; }
+
+/* Empty state */
+.empty-state {
+  grid-column: 1/-1; text-align: center; padding: 80px 24px;
+  color: var(--c-muted);
+}
+.empty-state .ei { font-size: 3rem; margin-bottom: 16px; }
+.empty-state h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; color: var(--c-text); }
+
+/* Load more */
+.load-more-wrap { text-align: center; padding: 32px 0 16px; }
+
+/* ─────────────────────────────────────────────────────────
+   DETAIL MODAL (upgraded)
+───────────────────────────────────────────────────────── */
+.dest-modal-overlay {
+  position: fixed; inset: 0; z-index: 2000;
+  background: rgba(0,0,0,.72); backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px; opacity: 0; pointer-events: none; transition: opacity .25s;
+}
+.dest-modal-overlay.open { opacity: 1; pointer-events: all; }
+.dest-modal {
+  background: var(--c-surface); border-radius: 20px; overflow: hidden;
+  width: 100%; max-width: 720px; max-height: 88vh; overflow-y: auto;
+  transform: translateY(24px) scale(.97);
+  transition: transform .3s cubic-bezier(.34,1.56,.64,1);
+  box-shadow: 0 32px 80px rgba(0,0,0,.5);
+}
+.dest-modal-overlay.open .dest-modal { transform: none; }
+.dest-modal::-webkit-scrollbar { width: 5px; }
+.dest-modal::-webkit-scrollbar-thumb { background: var(--c-border); border-radius: 3px; }
+
+.dm-hero {
+  position: relative; height: 260px; background: #111;
+  display: flex; align-items: flex-end; padding: 24px;
+}
+.dm-hero-img {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+}
+.dm-hero-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,.8) 0%, transparent 60%);
+}
+.dm-hero-content { position: relative; z-index: 2; color: #fff; }
+.dm-close {
+  position: absolute; top: 14px; right: 14px; z-index: 10;
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(0,0,0,.5); border: 1.5px solid rgba(255,255,255,.2);
+  color: #fff; font-size: 1.2rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.dm-close:hover { background: rgba(0,0,0,.8); }
+.dm-cat-badge {
+  font-size: .68rem; font-weight: 800; padding: 4px 12px; border-radius: 100px;
+  background: rgba(255,255,255,.2); color: #fff; margin-bottom: 8px; display: inline-block;
+}
+.dm-title { font-size: 1.5rem; font-weight: 900; line-height: 1.2; }
+.dm-body { padding: 24px 28px 32px; }
+.dm-rating { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+.dm-stars { color: #f5a623; font-size: 1rem; }
+.dm-score { font-weight: 800; font-size: 1rem; }
+.dm-reviews { font-size: .8rem; color: var(--c-muted); }
+.dm-desc { font-size: .9rem; line-height: 1.8; color: var(--c-text-2); margin-bottom: 20px; }
+.dm-info-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;
+}
+.dm-info-item {
+  background: var(--c-bg); border-radius: 12px; padding: 12px 14px;
+}
+.dm-info-label { font-size: .68rem; font-weight: 700; color: var(--c-muted); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 4px; }
+.dm-info-val { font-size: .83rem; font-weight: 600; color: var(--c-text); line-height: 1.4; }
+.dm-tips h4 { font-size: .85rem; font-weight: 800; margin-bottom: 10px; }
+.dm-tips li {
+  display: flex; gap: 8px; padding: 7px 0;
+  border-bottom: 1px solid var(--c-border); font-size: .83rem; color: var(--c-text-2); line-height: 1.5;
+}
+.dm-tips li:last-child { border-bottom: none; }
+.dm-tip-arrow { color: var(--c-primary); font-weight: 800; flex-shrink: 0; }
+.dm-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+.dm-tag { font-size: .7rem; padding: 3px 10px; background: var(--c-bg); border: 1.5px solid var(--c-border); border-radius: 100px; color: var(--c-muted); }
+.dm-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--c-border); }
+.dm-actions .btn { flex: 1; min-width: 130px; justify-content: center; }
+
+/* Page padding for fixed smart-bar */
+.dest-page-wrap { padding-bottom: 80px; }
+
+/* Mobile modal */
+@media (max-width:600px) {
+  .dest-modal-overlay { padding: 0; align-items: flex-end; }
+  .dest-modal { border-radius: 20px 20px 0 0; max-height: 92vh; }
+  .dm-info-grid { grid-template-columns: 1fr; }
+  .slide-arrow { width: 36px; height: 36px; font-size: 1rem; }
+  .filter-row1 { flex-wrap: wrap; }
+}
+  </style>
+</head>
+<body class="page-normal">
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <a href="index.html" class="navbar-brand">
+    <div class="navbar-logo">🗺️</div>
+    <div class="navbar-name">Explore<span>Quảng Trị</span></div>
+  </a>
+  <div class="navbar-nav" id="navMenu">
+    <a href="index.html" class="nav-link">🏠 Trang Chủ</a>
+    <a href="destinations.html" class="nav-link active">📍 Địa Điểm</a>
+    <a href="itinerary.html" class="nav-link">📅 Lộ Trình</a>
+    <a href="services.html" class="nav-link">🛎️ Dịch Vụ</a>
+    <a href="index.html#tips-section" class="nav-link">💡 Lưu ý & Chuẩn bị</a>
+  </div>
+  <a href="index.html#planner-section" class="btn btn-accent btn-sm navbar-cta">
+    <i class="fas fa-magic"></i> Lập kế hoạch
+  </a>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO SLIDESHOW -->
+<div class="hero-slideshow" id="heroSlideshow">
+  <div id="slidesContainer"></div>
+  <button class="slide-arrow prev" onclick="slideNav(-1)">&#8249;</button>
+  <button class="slide-arrow next" onclick="slideNav(1)">&#8250;</button>
+  <div class="slide-dots" id="slideDots"></div>
+  <div class="slide-progress"><div class="slide-progress-fill" id="slideProgressFill"></div></div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar" id="filterBar">
+  <div class="filter-bar-inner">
+    <div class="filter-row1">
+      <div class="filter-search">
+        <i class="fas fa-search"></i>
+        <input type="text" id="destSearch" placeholder="Tìm địa điểm...">
+      </div>
+      <span class="dest-count" id="destCount"></span>
+      <select class="sort-sel" id="sortSelect">
+        <option value="highlight">Nổi bật trước</option>
+        <option value="rating">Đánh giá cao nhất</option>
+        <option value="name">Tên A–Z</option>
+        <option value="free">Miễn phí trước</option>
+      </select>
+    </div>
+    <div class="filter-row2" id="filterRow2">
+      <button class="region-tab active" data-region="all">🗺️ Tất cả</button>
+      <button class="region-tab" data-region="south">🏛️ Vùng Nam QT</button>
+      <button class="region-tab" data-region="north">🕳️ Vùng Bắc QT</button>
+      <div class="filter-divider"></div>
+      <button class="cat-chip active" data-cat="all">Tất cả loại</button>
+      <button class="cat-chip" data-cat="history">🏛️ Lịch sử</button>
+      <button class="cat-chip" data-cat="nature">🌿 Thiên nhiên</button>
+      <button class="cat-chip" data-cat="beach">🏖️ Biển & Đảo</button>
+      <button class="cat-chip" data-cat="religion">⛩️ Tâm linh</button>
+    </div>
+  </div>
+</div>
+
+<!-- DESTINATIONS GRID -->
+<div class="dest-page-wrap">
+  <div class="container" style="padding-top:32px;">
+    <div class="dest-grid" id="destGrid"></div>
+    <div class="load-more-wrap" id="loadMoreWrap" style="display:none;">
+      <button class="btn btn-outline btn-lg" onclick="loadMore()">
+        Xem thêm địa điểm <i class="fas fa-chevron-down"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="dest-modal-overlay" id="destModal" onclick="if(event.target===this)closeModal()">
+  <div class="dest-modal" id="destModalContent">
+    <div class="dm-hero" id="dmHero">
+      <img class="dm-hero-img" id="dmHeroImg" src="" alt="" onerror="this.style.display='none'">
+      <div class="dm-hero-overlay"></div>
+      <div class="dm-hero-content">
+        <div class="dm-cat-badge" id="dmCat"></div>
+        <div class="dm-title" id="dmTitle"></div>
+      </div>
+      <button class="dm-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="dm-body" id="dmBody"></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer style="background:var(--c-text);color:rgba(255,255,255,.7);text-align:center;padding:28px;font-size:.82rem;">
+  <div>© 2025 Explore Quảng Trị ·
+    <a href="index.html" style="color:rgba(255,255,255,.7);">Trang chủ</a> ·
+    <a href="index.html#planner-section" style="color:rgba(255,255,255,.7);">Lập kế hoạch</a>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script>
+// ── Image mappings ────────────────────────────────────────
+const DEST_IMAGES = {
+  1:  'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=700&q=80',
+  2:  'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=80',
+  3:  'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=700&q=80',
+  10: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=700&q=80',
+  12: 'https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?w=700&q=80',
+  13: 'https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=700&q=80',
+  17: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=700&q=80',
+  18: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=700&q=80',
+  19: 'https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?w=700&q=80',
+  20: 'https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=700&q=80',
+  26: 'https://images.unsplash.com/photo-1473116763249-2faaef81ccda?w=700&q=80',
+  27: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=700&q=80',
+};
+const CAT_IMAGES = {
+  history:  'https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=700&q=80',
+  nature:   'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=700&q=80',
+  beach:    'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=700&q=80',
+  religion: 'https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=700&q=80',
+};
+const CAT_GRADIENTS = {
+  history:  'linear-gradient(145deg,#3d1008,#8b2500)',
+  nature:   'linear-gradient(145deg,#1a2e0a,#3d6b1c)',
+  beach:    'linear-gradient(145deg,#01406b,#0277bd)',
+  religion: 'linear-gradient(145deg,#3d0d5c,#7b1fa2)',
+};
+const CAT_ICONS = { history:'🏛️', nature:'🌿', beach:'🏖️', religion:'⛩️', food:'🍜', stay:'🏨', transport:'🚗', service:'🏪' };
+
+// IDs thuộc Vùng Bắc QT (cũ Quảng Bình)
+const NORTH_IDS = new Set([17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40]);
+
+function getImg(d) { return DEST_IMAGES[d.id] || CAT_IMAGES[d.category] || CAT_IMAGES.history; }
+function getGrad(d) { return CAT_GRADIENTS[d.category] || 'linear-gradient(145deg,#1a2e0a,#0d3a24)'; }
+function getRegion(d) { return NORTH_IDS.has(d.id) ? 'north' : 'south'; }
+function getFavs() { try { return JSON.parse(localStorage.getItem('eqt_favorites')||'[]'); } catch { return []; } }
+function saveFavs(f) { localStorage.setItem('eqt_favorites', JSON.stringify(f)); }
+function getStars(r) { return '★'.repeat(Math.round(r)); }
+
+// ── Slideshow ─────────────────────────────────────────────
+const SLIDES = [
+  { id:1,  img:'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1600&q=85', region:'🏛️ Vùng Nam Quảng Trị' },
+  { id:19, img:'https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?w=1600&q=85', region:'🕳️ Vùng Bắc Quảng Trị' },
+  { id:3,  img:'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1600&q=85', region:'🏛️ Vùng Nam Quảng Trị' },
+  { id:17, img:'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1600&q=85', region:'🕳️ Vùng Bắc Quảng Trị' },
+  { id:10, img:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600&q=85', region:'🏛️ Vùng Nam Quảng Trị' },
+  { id:26, img:'https://images.unsplash.com/photo-1473116763249-2faaef81ccda?w=1600&q=85', region:'🕳️ Vùng Bắc Quảng Trị' },
+  { id:13, img:'https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=1600&q=85', region:'🏛️ Vùng Nam Quảng Trị' },
+  { id:2,  img:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1600&q=85', region:'🏛️ Vùng Nam Quảng Trị' },
+];
+
+let slideIdx = 0, slideTimer, progressTimer;
+
+function initSlideshow() {
+  const dest = typeof destinations !== 'undefined' ? destinations : [];
+  const container = document.getElementById('slidesContainer');
+  const dots = document.getElementById('slideDots');
+
+  container.innerHTML = SLIDES.map((s, i) => {
+    const d = dest.find(x => x.id === s.id);
+    if (!d) return '';
+    const badges = [
+      d.duration ? `⏱ ${d.duration}` : '',
+      d.admission === 'Miễn phí' ? '🎟 Miễn phí' : d.admission ? `🎟 ${d.admission}` : '',
+      `⭐ ${d.rating}`,
+    ].filter(Boolean);
+    return `
+      <div class="slide ${i===0?'active':''}" id="slide-${i}">
+        <div class="slide-bg" style="background-image:url('${s.img}');"></div>
+        <div class="slide-overlay"></div>
+        <div class="slide-content">
+          <div class="slide-region">${s.region}</div>
+          <h1 class="slide-title">${d.name}</h1>
+          <p class="slide-tagline">${d.description.slice(0,110)}…</p>
+          <div class="slide-badges">${badges.map(b=>`<span class="slide-badge">${b}</span>`).join('')}</div>
+          <button class="slide-btn-detail" onclick="openModal(${d.id})">
+            <i class="fas fa-info-circle"></i> Xem chi tiết
+          </button>
+        </div>
+      </div>`;
+  }).join('');
+
+  dots.innerHTML = SLIDES.map((_,i) =>
+    `<button class="slide-dot ${i===0?'active':''}" onclick="goSlide(${i})"></button>`
+  ).join('');
+
+  startSlideTimer();
+}
+
+function goSlide(n) {
+  document.getElementById(`slide-${slideIdx}`)?.classList.remove('active');
+  document.querySelectorAll('.slide-dot').forEach((d,i) => d.classList.toggle('active', i===n));
+  slideIdx = (n + SLIDES.length) % SLIDES.length;
+  document.getElementById(`slide-${slideIdx}`)?.classList.add('active');
+  resetProgress();
+}
+
+function slideNav(dir) { goSlide(slideIdx + dir); clearInterval(slideTimer); startSlideTimer(); }
+
+function startSlideTimer() {
+  slideTimer = setInterval(() => goSlide(slideIdx + 1), 5500);
+  resetProgress();
+}
+
+function resetProgress() {
+  const bar = document.getElementById('slideProgressFill');
+  if (!bar) return;
+  bar.style.transition = 'none'; bar.style.width = '0%';
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    bar.style.transition = 'width 5.5s linear'; bar.style.width = '100%';
+  }));
+}
+
+// ── Filter state ──────────────────────────────────────────
+let state = { cat: 'all', region: 'all', sort: 'highlight', q: '', show: 12 };
+
+function getFiltered() {
+  let list = [...destinations];
+  if (state.region !== 'all') list = list.filter(d => getRegion(d) === state.region);
+  if (state.cat !== 'all')    list = list.filter(d => d.category === state.cat);
+  if (state.q) list = list.filter(d =>
+    d.name.toLowerCase().includes(state.q) || d.description.toLowerCase().includes(state.q)
+  );
+  if (state.sort === 'rating')    list.sort((a,b) => b.rating - a.rating);
+  else if (state.sort === 'name') list.sort((a,b) => a.name.localeCompare(b.name, 'vi'));
+  else if (state.sort === 'highlight') list.sort((a,b) => (b.highlight?1:0)-(a.highlight?1:0));
+  else if (state.sort === 'free') list.sort((a,b) => (a.admission==='Miễn phí'?-1:1)-(b.admission==='Miễn phí'?-1:1));
+  return list;
+}
+
+function render() {
+  const list = getFiltered();
+  const showing = list.slice(0, state.show);
+  const favs = getFavs();
+  const grid = document.getElementById('destGrid');
+  document.getElementById('destCount').textContent = `${showing.length} / ${list.length} địa điểm`;
+  document.getElementById('loadMoreWrap').style.display = list.length > state.show ? 'block' : 'none';
+
+  if (!showing.length) {
+    grid.innerHTML = `
+      <div class="empty-state">
+        <div class="ei">🔍</div>
+        <h3>Không tìm thấy địa điểm phù hợp</h3>
+        <p>Thử thay đổi bộ lọc hoặc từ khoá tìm kiếm.</p>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = showing.map(d => {
+    const img   = getImg(d);
+    const grad  = getGrad(d);
+    const icon  = CAT_ICONS[d.category] || '📍';
+    const isFav = favs.includes(d.id);
+    const catLabel = CATEGORIES[d.category]?.label || d.category;
+    return `
+      <div class="dcard" style="background:${grad};" onclick="openModal(${d.id})">
+        <img class="dcard-img" src="${img}" alt="${d.name}" loading="lazy"
+             onload="this.classList.add('loaded')" onerror="this.remove()">
+        <div class="dcard-overlay"></div>
+        <div class="dcard-top">
+          <div>
+            <div class="dcard-cat">${catLabel}</div>
+            ${d.highlight ? '<div class="dcard-highlight" style="margin-top:4px;">⭐ Nổi bật</div>' : ''}
+          </div>
+          <button class="dcard-fav" onclick="event.stopPropagation();toggleFav(${d.id},this)" title="Lưu yêu thích">
+            ${isFav ? '❤️' : '🤍'}
+          </button>
+        </div>
+        <div class="dcard-body">
+          <div class="dcard-icon">${icon}</div>
+          <div class="dcard-name">${d.name}</div>
+          <div class="dcard-tagline">${d.description.slice(0,72)}…</div>
+          <div class="dcard-meta">
+            ${d.duration ? `<span class="dcard-tag">⏱ ${d.duration}</span>` : ''}
+            ${d.admission === 'Miễn phí' ? '<span class="dcard-tag free">Miễn phí</span>' : ''}
+            <span class="dcard-rating">★ ${d.rating}</span>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function loadMore() { state.show += 12; render(); }
+
+function toggleFav(id, btn) {
+  const favs = getFavs();
+  const idx = favs.indexOf(id);
+  if (idx > -1) { favs.splice(idx,1); btn.textContent='🤍'; }
+  else           { favs.push(id);     btn.textContent='❤️'; }
+  saveFavs(favs);
+}
+
+// ── Detail modal ──────────────────────────────────────────
+function openModal(id) {
+  const d = destinations.find(x => x.id === id);
+  if (!d) return;
+  const catLabel = CATEGORIES[d.category]?.label || d.category;
+  const favs = getFavs();
+
+  // Hero
+  document.getElementById('dmCat').textContent = catLabel;
+  document.getElementById('dmTitle').textContent = d.name;
+  const heroImg = document.getElementById('dmHeroImg');
+  heroImg.src = getImg(d);
+  heroImg.style.display = 'block';
+  document.getElementById('dmHero').style.background = getGrad(d);
+
+  // Body
+  document.getElementById('dmBody').innerHTML = `
+    <div class="dm-rating">
+      <span class="dm-stars">${getStars(d.rating)}</span>
+      <span class="dm-score">${d.rating}</span>
+      <span class="dm-reviews">(${d.reviews?.toLocaleString('vi') || ''} đánh giá)</span>
+    </div>
+    <p class="dm-desc">${d.description}</p>
+    <div class="dm-info-grid">
+      ${d.address ? `<div class="dm-info-item"><div class="dm-info-label">📍 Địa chỉ</div><div class="dm-info-val">${d.address}</div></div>` : ''}
+      ${d.hours   ? `<div class="dm-info-item"><div class="dm-info-label">🕐 Giờ mở cửa</div><div class="dm-info-val">${d.hours}</div></div>` : ''}
+      ${d.admission ? `<div class="dm-info-item"><div class="dm-info-label">🎟 Vé vào cửa</div><div class="dm-info-val">${d.admission}</div></div>` : ''}
+      ${d.duration ? `<div class="dm-info-item"><div class="dm-info-label">⏱ Thời gian tham quan</div><div class="dm-info-val">${d.duration}</div></div>` : ''}
+      ${d.bestTime ? `<div class="dm-info-item"><div class="dm-info-label">☀️ Thời điểm đẹp</div><div class="dm-info-val" style="font-size:.78rem;">${d.bestTime}</div></div>` : ''}
+      ${d.phone    ? `<div class="dm-info-item"><div class="dm-info-label">📞 Liên hệ</div><div class="dm-info-val">${d.phone}</div></div>` : ''}
+    </div>
+    ${d.tips?.length ? `
+      <div class="dm-tips">
+        <h4>💡 Mẹo ghé thăm</h4>
+        <ul style="list-style:none;">${d.tips.map(t=>`<li><span class="dm-tip-arrow">→</span>${t}</li>`).join('')}</ul>
+      </div>` : ''}
+    ${d.tags?.length ? `<div class="dm-tags">${d.tags.map(t=>`<span class="dm-tag">#${t}</span>`).join('')}</div>` : ''}
+    <div class="dm-actions">
+      <a href="index.html#planner-section" class="btn btn-primary"><i class="fas fa-magic"></i> Lập kế hoạch</a>
+      <button id="dmFavBtn" class="btn ${favs.includes(id)?'btn-accent':'btn-outline'}"
+              onclick="toggleFavModal(${id})">
+        ${favs.includes(id) ? '❤️ Đã lưu' : '🤍 Lưu lại'}
+      </button>
+      <a href="tel:0337788044" class="btn btn-outline"><i class="fas fa-phone"></i> Tư vấn</a>
+    </div>`;
+
+  document.getElementById('destModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function toggleFavModal(id) {
+  const favs = getFavs();
+  const idx = favs.indexOf(id);
+  if (idx > -1) { favs.splice(idx,1); }
+  else           { favs.push(id); }
+  saveFavs(favs);
+  const btn = document.getElementById('dmFavBtn');
+  if (btn) {
+    btn.textContent = favs.includes(id) ? '❤️ Đã lưu' : '🤍 Lưu lại';
+    btn.className = `btn ${favs.includes(id)?'btn-accent':'btn-outline'}`;
+  }
+  render();
+}
+
+function closeModal() {
+  document.getElementById('destModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ── Init ──────────────────────────────────────────────────
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 10);
+});
+function toggleMenu() { document.getElementById('navMenu').classList.toggle('open'); }
+
+document.addEventListener('DOMContentLoaded', () => {
+  initSlideshow();
+  render();
+
+  // Region tabs
+  document.querySelectorAll('.region-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.region-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      state.region = btn.dataset.region; state.show = 12; render();
+    });
+  });
+
+  // Category chips
+  document.querySelectorAll('.cat-chip').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.cat-chip').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      state.cat = btn.dataset.cat; state.show = 12; render();
+    });
+  });
+
+  // Sort
+  document.getElementById('sortSelect').addEventListener('change', e => {
+    state.sort = e.target.value; render();
+  });
+
+  // Search
+  let searchDebounce;
+  document.getElementById('destSearch').addEventListener('input', e => {
+    clearTimeout(searchDebounce);
+    searchDebounce = setTimeout(() => {
+      state.q = e.target.value.trim().toLowerCase(); state.show = 12; render();
+    }, 250);
+  });
+
+  // URL params
+  const params = new URLSearchParams(window.location.search);
+  const cat = params.get('cat');
+  if (cat) {
+    state.cat = cat;
+    document.querySelectorAll('.cat-chip').forEach(b => b.classList.toggle('active', b.dataset.cat === cat));
+  }
+  if (params.get('q')) {
+    state.q = params.get('q').toLowerCase();
+    document.getElementById('destSearch').value = params.get('q');
+    render();
+  }
+
+  // Keyboard
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
+    if (document.getElementById('destModal').classList.contains('open')) return;
+    if (e.key === 'ArrowLeft')  slideNav(-1);
+    if (e.key === 'ArrowRight') slideNav(1);
+  });
+});
+</script>
+</body>
+</html>

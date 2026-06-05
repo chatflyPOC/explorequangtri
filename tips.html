@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mẹo Du Lịch Quảng Trị | Explore Quảng Trị</title>
+  <meta name="description" content="Tất cả mẹo du lịch Quảng Trị: thời tiết, di chuyển, ẩm thực, lưu trú, văn hóa và an toàn.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .page-hero { background: linear-gradient(135deg, #0f6b5e, #1a9e87); padding: 100px 0 60px; text-align: center; color: #fff; }
+    .page-hero h1 { color: #fff; margin-bottom: 12px; }
+    .page-hero p { color: rgba(255,255,255,.85); }
+    .tips-full-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 28px; }
+    .tip-card-full { background: var(--bg-card); border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow-sm); transition: all var(--transition); }
+    .tip-card-full:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .tip-card-full.weather { border-left: 4px solid #2980b9; }
+    .tip-card-full.transport { border-left: 4px solid var(--primary); }
+    .tip-card-full.food { border-left: 4px solid var(--accent); }
+    .tip-card-full.stay { border-left: 4px solid #16a085; }
+    .tip-card-full.culture { border-left: 4px solid #8e44ad; }
+    .tip-card-full.safety { border-left: 4px solid var(--danger); }
+    .tip-card-full.photo { border-left: 4px solid #f39c12; }
+    .best-time-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    @media (max-width: 768px) { .best-time-grid { grid-template-columns: repeat(2, 1fr); } }
+    .month-card { padding: 14px; border-radius: var(--radius-sm); text-align: center; font-size: .82rem; }
+    .month-good { background: rgba(26,107,92,.1); border: 1px solid rgba(26,107,92,.3); }
+    .month-ok { background: rgba(212,148,58,.1); border: 1px solid rgba(212,148,58,.3); }
+    .month-bad { background: rgba(192,57,43,.08); border: 1px solid rgba(192,57,43,.2); }
+    .month-name { font-weight: 700; font-size: .95rem; margin-bottom: 4px; }
+  </style>
+</head>
+<body class="page-normal">
+
+<nav class="navbar" id="navbar">
+  <a href="index.html" class="navbar-brand">
+    <div class="navbar-logo">🗺️</div>
+    <div class="navbar-name">Explore<span>Quảng Trị</span></div>
+  </a>
+  <div class="navbar-nav" id="navMenu">
+    <a href="index.html"             class="nav-link">🏠 Trang Chủ</a>
+    <a href="destinations.html"      class="nav-link">📍 Địa Điểm</a>
+    <a href="itinerary.html"         class="nav-link">📅 Lộ Trình</a>
+    <a href="services.html"          class="nav-link">🛎️ Dịch Vụ</a>
+    <a href="index.html#tips-section" class="nav-link active">💡 Lưu ý & Chuẩn bị</a>
+  </div>
+  <a href="index.html#planner-section" class="btn btn-accent btn-sm navbar-cta">
+    <i class="fas fa-magic"></i> Lập kế hoạch
+  </a>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+</nav>
+
+<div class="page-hero">
+  <div class="container">
+    <div class="hero-badge" style="display:inline-flex;margin-bottom:16px;"><i class="fas fa-lightbulb"></i> Tips & Tricks</div>
+    <h1>Mẹo Du Lịch Quảng Trị</h1>
+    <p>Tất cả những gì bạn cần biết để có chuyến đi an toàn, thuận tiện và đáng nhớ</p>
+  </div>
+</div>
+
+<div class="container section-sm">
+
+  <!-- Best time to visit -->
+  <div style="margin-bottom:56px;">
+    <h2 style="margin-bottom:8px;">📅 Thời Gian Tốt Nhất Để Đi</h2>
+    <p style="color:var(--text-muted);margin-bottom:28px;">Quảng Trị có 4 mùa thời tiết rõ rệt — chọn thời điểm phù hợp mục đích chuyến đi</p>
+    <div class="best-time-grid">
+      <div class="month-card month-good"><div class="month-name">Tháng 3–5</div>⭐ Tốt nhất<br><small>Xuân, mát mẻ, ít mưa</small></div>
+      <div class="month-card month-ok"><div class="month-name">Tháng 6–8</div>☀️ Tốt cho biển<br><small>Nóng nhưng biển đẹp</small></div>
+      <div class="month-card month-bad"><div class="month-name">Tháng 9–10</div>🌧️ Mùa mưa<br><small>Lũ lụt, hạn chế đi</small></div>
+      <div class="month-card month-good"><div class="month-name">Tháng 11–2</div>✅ Khá tốt<br><small>Mát, ít đông người</small></div>
+    </div>
+    <div style="background:rgba(26,107,92,.07);border-radius:var(--radius);padding:20px;margin-top:20px;font-size:.875rem;">
+      <strong>💡 Gợi ý theo mục đích:</strong>
+      <ul style="list-style:none;margin-top:8px;display:flex;flex-direction:column;gap:6px;">
+        <li>🏛️ <strong>Lịch sử & Tâm linh:</strong> Quanh năm, tốt nhất tháng 3–5 và 11–1</li>
+        <li>🏖️ <strong>Biển & Đảo:</strong> Tháng 4–8 (tháng 7–8 là đỉnh cao)</li>
+        <li>🌿 <strong>Rừng & Núi:</strong> Tháng 3–5 và 9–11 (tránh đỉnh nắng và mưa lớn)</li>
+        <li>🕯️ <strong>Đại hội La Vang:</strong> Tháng 8 năm lẻ (2027, 2029...) — đặt phòng sớm 3 tháng</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- All Tips -->
+  <h2 style="margin-bottom:28px;">💡 Tất Cả Mẹo Du Lịch</h2>
+  <div class="tips-full-grid" id="allTips">
+    <!-- Filled by JS -->
+  </div>
+
+  <!-- Photo Tips -->
+  <div style="background:var(--bg);border-radius:var(--radius-lg);padding:32px;margin-top:48px;">
+    <h3 style="margin-bottom:20px;">📸 Mẹo Chụp Ảnh Đẹp</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;">
+      <div style="background:var(--bg-card);padding:18px;border-radius:var(--radius-sm);">
+        <div style="font-size:1.5rem;margin-bottom:8px;">🌅</div>
+        <div style="font-weight:700;margin-bottom:6px;">Thành Cổ Quảng Trị</div>
+        <p style="font-size:.83rem;color:var(--text-muted);">Chụp lúc hoàng hôn (17–18h) — ánh sáng vàng rọi qua tường thành cũ rất đẹp. Tránh giờ trưa nắng chói.</p>
+      </div>
+      <div style="background:var(--bg-card);padding:18px;border-radius:var(--radius-sm);">
+        <div style="font-size:1.5rem;margin-bottom:8px;">🌉</div>
+        <div style="font-weight:700;margin-bottom:6px;">Cầu Hiền Lương</div>
+        <p style="font-size:.83rem;color:var(--text-muted);">Sáng sớm 6–7h: ánh bình minh chiếu trên sông Bến Hải, ít người. Chụp từ bờ Nam nhìn lên cầu.</p>
+      </div>
+      <div style="background:var(--bg-card);padding:18px;border-radius:var(--radius-sm);">
+        <div style="font-size:1.5rem;margin-bottom:8px;">🏖️</div>
+        <div style="font-weight:700;margin-bottom:6px;">Biển Cửa Tùng</div>
+        <p style="font-size:.83rem;color:var(--text-muted);">Giờ vàng: 6–7h sáng và 17–18h chiều. Sử dụng phân cực để giảm phản chiếu nước.</p>
+      </div>
+      <div style="background:var(--bg-card);padding:18px;border-radius:var(--radius-sm);">
+        <div style="font-size:1.5rem;margin-bottom:8px;">🏝️</div>
+        <div style="font-weight:700;margin-bottom:6px;">Đảo Cồn Cỏ</div>
+        <p style="font-size:.83rem;color:var(--text-muted);">Drone view đẹp nhất vào buổi sáng khi biển lặng. Dưới nước dùng kính lặn chụp san hô.</p>
+      </div>
+      <div style="background:var(--bg-card);padding:18px;border-radius:var(--radius-sm);">
+        <div style="font-size:1.5rem;margin-bottom:8px;">⛩️</div>
+        <div style="font-weight:700;margin-bottom:6px;">Linh địa La Vang</div>
+        <p style="font-size:.83rem;color:var(--text-muted);">Buổi tối khi thắp nến — ánh sáng vàng lung linh rất linh thiêng. Dùng chân máy, tắt đèn flash.</p>
+      </div>
+      <div style="background:var(--bg-card);padding:18px;border-radius:var(--radius-sm);">
+        <div style="font-size:1.5rem;margin-bottom:8px;">🌿</div>
+        <div style="font-weight:700;margin-bottom:6px;">Rừng Đakrông</div>
+        <p style="font-size:.83rem;color:var(--text-muted);">Sương sớm trên sông Đakrông khoảng 6–8h — phong cảnh huyền ảo như tranh vẽ.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Budget Guide -->
+  <div style="margin-top:48px;background:var(--bg-card);border-radius:var(--radius-lg);padding:32px;box-shadow:var(--shadow-sm);">
+    <h3 style="margin-bottom:20px;">💰 Chi Phí Dự Kiến</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:20px;">
+      <div style="text-align:center;padding:20px;background:rgba(26,107,92,.06);border-radius:var(--radius-sm);">
+        <div style="font-size:1.4rem;margin-bottom:8px;">🏨</div>
+        <div style="font-weight:700;margin-bottom:4px;">Lưu trú / đêm</div>
+        <div style="color:var(--primary);font-weight:700;">150k – 2.5 triệu</div>
+        <div style="font-size:.78rem;color:var(--text-muted);">Budget đến 4 sao</div>
+      </div>
+      <div style="text-align:center;padding:20px;background:rgba(212,148,58,.06);border-radius:var(--radius-sm);">
+        <div style="font-size:1.4rem;margin-bottom:8px;">🍜</div>
+        <div style="font-weight:700;margin-bottom:4px;">Ăn uống / ngày</div>
+        <div style="color:var(--accent);font-weight:700;">150k – 600k</div>
+        <div style="font-size:.78rem;color:var(--text-muted);">3 bữa đủ đầy</div>
+      </div>
+      <div style="text-align:center;padding:20px;background:rgba(41,128,185,.06);border-radius:var(--radius-sm);">
+        <div style="font-size:1.4rem;margin-bottom:8px;">🚗</div>
+        <div style="font-weight:700;margin-bottom:4px;">Di chuyển / ngày</div>
+        <div style="color:#2980b9;font-weight:700;">100k – 1 triệu</div>
+        <div style="font-size:.78rem;color:var(--text-muted);">Xe máy đến ô tô</div>
+      </div>
+      <div style="text-align:center;padding:20px;background:rgba(142,68,173,.06);border-radius:var(--radius-sm);">
+        <div style="font-size:1.4rem;margin-bottom:8px;">🎟️</div>
+        <div style="font-weight:700;margin-bottom:4px;">Vé vào cửa</div>
+        <div style="color:#8e44ad;font-weight:700;">Miễn phí – 200k</div>
+        <div style="font-size:.78rem;color:var(--text-muted);">Hầu hết miễn phí</div>
+      </div>
+    </div>
+    <div style="margin-top:16px;padding:14px 18px;background:var(--bg);border-radius:var(--radius-sm);font-size:.875rem;">
+      <strong>📊 Ước tính tổng chi phí 2 ngày 1 đêm:</strong>
+      <br>Budget: ~600k – 900k/người | Tầm trung: ~1.5–2.5 triệu/người | Thoải mái: ~3–5 triệu/người
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div style="text-align:center;margin-top:48px;padding:40px;background:linear-gradient(135deg,var(--primary-dark),var(--primary));border-radius:var(--radius-lg);color:#fff;">
+    <h3 style="color:#fff;margin-bottom:12px;">Đã sẵn sàng lên kế hoạch?</h3>
+    <p style="color:rgba(255,255,255,.85);margin-bottom:24px;">Sử dụng những mẹo này để tạo lộ trình hoàn hảo cho bạn</p>
+    <a href="itinerary.html" class="btn btn-accent btn-lg">
+      <i class="fas fa-route"></i> Tạo lộ trình ngay
+    </a>
+  </div>
+</div>
+
+<footer style="background:var(--text);color:rgba(255,255,255,.7);text-align:center;padding:24px;font-size:.85rem;margin-top:48px;">
+  <div>© 2025 ExploreQuảngTrị.com · <a href="index.html" style="color:var(--accent-light);">Trang chủ</a> · <a href="map.html" style="color:var(--accent-light);">Bản đồ</a></div>
+</footer>
+
+<script src="js/data.js"></script>
+<script>
+  window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY>10));
+  function toggleMenu() { document.getElementById('navMenu').classList.toggle('open'); }
+
+  const tipClasses = ['weather','transport','food','stay','culture','safety'];
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const container = document.getElementById('allTips');
+    container.innerHTML = generalTips.map((tip, i) => `
+      <div class="tip-card-full ${tipClasses[i] || 'weather'}">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
+          <span style="font-size:2rem;">${tip.icon}</span>
+          <h3 style="font-size:1.1rem;">${tip.category}</h3>
+        </div>
+        <ul style="list-style:none;">
+          ${tip.tips.map(t => `
+            <li style="padding:9px 0;border-bottom:1px solid var(--border);font-size:.875rem;display:flex;gap:10px;line-height:1.5;">
+              <span style="color:var(--primary);font-weight:700;flex-shrink:0;">→</span>
+              <span>${t}</span>
+            </li>
+          `).join('')}
+        </ul>
+      </div>
+    `).join('');
+  });
+</script>
+</body>
+</html>

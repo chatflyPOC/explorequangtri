@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bản Đồ Du Lịch Quảng Trị | Explore Quảng Trị</title>
+  <meta name="description" content="Bản đồ tương tác tất cả địa điểm du lịch Quảng Trị — di tích, biển, thiên nhiên, dịch vụ.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { overflow: hidden; }
+    .map-layout { height: calc(100vh - 68px); margin-top: 68px; }
+    #map { width: 100%; height: 100%; }
+    .sidebar-search { position: relative; }
+    .sidebar-search input {
+      width: 100%; padding: 10px 14px 10px 38px;
+      border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+      font-size: .875rem; outline: none; font-family: var(--font-body);
+      transition: border-color var(--transition);
+    }
+    .sidebar-search input:focus { border-color: var(--primary); }
+    .sidebar-search .si-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+    .map-cat-filters { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; }
+    .map-cat-btn {
+      padding: 4px 11px; border-radius: 100px; border: 1.5px solid var(--border);
+      font-size: .75rem; font-weight: 600; cursor: pointer; transition: all var(--transition);
+      color: var(--text-muted); background: var(--bg-card);
+    }
+    .map-cat-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .map-cat-btn:hover:not(.active) { border-color: var(--primary); color: var(--primary); }
+    .map-count { font-size: .78rem; color: var(--text-muted); margin-top: 8px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .no-results { padding: 32px 20px; text-align: center; color: var(--text-muted); font-size: .9rem; }
+  </style>
+</head>
+<body>
+
+<!-- ── Navbar ── -->
+<nav class="navbar" id="navbar">
+  <a href="index.html" class="navbar-brand">
+    <div class="navbar-logo">🗺️</div>
+    <div class="navbar-name">Explore<span>Quảng Trị</span></div>
+  </a>
+  <div class="navbar-nav" id="navMenu">
+    <a href="index.html"             class="nav-link">🏠 Trang Chủ</a>
+    <a href="destinations.html"      class="nav-link">📍 Địa Điểm</a>
+    <a href="itinerary.html"         class="nav-link">📅 Lộ Trình</a>
+    <a href="services.html"          class="nav-link">🛎️ Dịch Vụ</a>
+    <a href="index.html#tips-section" class="nav-link">💡 Lưu ý & Chuẩn bị</a>
+  </div>
+  <a href="index.html#planner-section" class="btn btn-accent btn-sm navbar-cta">
+    <i class="fas fa-magic"></i> Lập kế hoạch
+  </a>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+</nav>
+
+<!-- ── Map Layout ── -->
+<div class="map-layout">
+  <!-- Sidebar -->
+  <div class="map-sidebar">
+    <div class="map-sidebar-header">
+      <div class="sidebar-search">
+        <i class="fas fa-search si-icon"></i>
+        <input type="text" id="sidebarSearch" placeholder="Tìm địa điểm...">
+      </div>
+      <div class="map-cat-filters" id="mapCatFilters">
+        <button class="map-cat-btn active" data-cat="all">Tất cả</button>
+        <button class="map-cat-btn" data-cat="history">🏛️ Lịch sử</button>
+        <button class="map-cat-btn" data-cat="beach">🏖️ Biển</button>
+        <button class="map-cat-btn" data-cat="nature">🌿 Thiên nhiên</button>
+        <button class="map-cat-btn" data-cat="religion">⛩️ Tâm linh</button>
+      </div>
+      <div class="map-count" id="mapCount">Hiển thị tất cả địa điểm</div>
+    </div>
+    <div class="map-sidebar-list" id="sidebarList">
+      <!-- Filled by JS -->
+    </div>
+  </div>
+
+  <!-- Map Container -->
+  <div class="map-container">
+    <div id="map"></div>
+
+    <!-- Info Panel -->
+    <div class="map-info-panel" id="infoPanel">
+      <button class="map-info-close" onclick="closeInfoPanel()">✕</button>
+      <div class="map-info-img" id="infoPanelImg">📍</div>
+      <div class="map-info-body">
+        <div class="map-info-title" id="infoPanelTitle"></div>
+        <div class="map-info-meta" id="infoPanelMeta"></div>
+        <div class="rating" id="infoPanelRating" style="margin-bottom:10px;"></div>
+        <p id="infoPanelDesc" style="font-size:.83rem;color:var(--text-muted);line-height:1.6;margin-bottom:12px;"></p>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-primary btn-sm" onclick="showFullDetail()">
+            <i class="fas fa-info-circle"></i> Chi tiết
+          </button>
+          <a id="infoPanelDirections" href="#" class="btn btn-outline btn-sm" target="_blank">
+            <i class="fas fa-directions"></i> Chỉ đường
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Legend -->
+    <div id="mapLegend" style="position:absolute;bottom:20px;left:20px;z-index:800;background:rgba(255,255,255,.95);border-radius:var(--radius-sm);padding:12px 14px;box-shadow:var(--shadow-md);font-size:.78rem;">
+      <div style="font-weight:700;margin-bottom:8px;">Chú giải</div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div style="display:flex;align-items:center;gap:7px;"><span style="width:12px;height:12px;border-radius:50%;background:#c0392b;display:inline-block;"></span> Di tích Lịch sử</div>
+        <div style="display:flex;align-items:center;gap:7px;"><span style="width:12px;height:12px;border-radius:50%;background:#2980b9;display:inline-block;"></span> Biển & Đảo</div>
+        <div style="display:flex;align-items:center;gap:7px;"><span style="width:12px;height:12px;border-radius:50%;background:#27ae60;display:inline-block;"></span> Thiên nhiên</div>
+        <div style="display:flex;align-items:center;gap:7px;"><span style="width:12px;height:12px;border-radius:50%;background:#8e44ad;display:inline-block;"></span> Tâm linh</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Detail Modal -->
+<div class="modal-overlay" id="destModal" onclick="closeModal(event)">
+  <div class="modal" id="modalContent">
+    <div class="modal-header">
+      <h3 id="modalTitle">Tên địa điểm</h3>
+      <button class="modal-close" onclick="closeModalDirect()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast">
+  <span class="toast-icon">✅</span>
+  <span id="toastMsg">Đã lưu</span>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="js/data.js"></script>
+<script src="js/map-page.js"></script>
+</body>
+</html>

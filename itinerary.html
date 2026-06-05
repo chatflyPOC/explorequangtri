@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tạo Lộ Trình Du Lịch Quảng Trị | Explore Quảng Trị</title>
+  <meta name="description" content="Tạo lộ trình du lịch Quảng Trị cá nhân hóa — chọn số ngày, sở thích và nhóm. Hệ thống tự động sắp xếp tối ưu.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .page-hero {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      padding: 100px 0 60px; text-align: center; color: #fff;
+    }
+    .page-hero h1 { color: #fff; margin-bottom: 12px; }
+    .page-hero p { color: rgba(255,255,255,.85); font-size: 1.05rem; max-width: 540px; margin: 0 auto; }
+    .itinerary-result { background: var(--bg-card); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 32px; }
+    .day-tab { padding: 10px 20px; border-radius: 100px; border: 2px solid var(--border); font-weight: 600; font-size: .9rem; cursor: pointer; transition: all var(--transition); color: var(--text-muted); }
+    .day-tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .day-tabs { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }
+    .print-section { background: var(--bg); border-radius: var(--radius); padding: 20px; margin-top: 20px; }
+    @media print {
+      .navbar, .page-hero, .wizard-steps, .wizard-action-bar, .print-hide { display: none !important; }
+      body { background: #fff; }
+      .itinerary-result { box-shadow: none; }
+    }
+  </style>
+</head>
+<body class="page-normal">
+
+<!-- ── Navbar ── -->
+<nav class="navbar" id="navbar">
+  <a href="index.html" class="navbar-brand">
+    <div class="navbar-logo">🗺️</div>
+    <div class="navbar-name">Explore<span>Quảng Trị</span></div>
+  </a>
+  <div class="navbar-nav" id="navMenu">
+    <a href="index.html"             class="nav-link">🏠 Trang Chủ</a>
+    <a href="destinations.html"      class="nav-link">📍 Địa Điểm</a>
+    <a href="itinerary.html"         class="nav-link active">📅 Lộ Trình</a>
+    <a href="services.html"          class="nav-link">🛎️ Dịch Vụ</a>
+    <a href="index.html#tips-section" class="nav-link">💡 Lưu ý & Chuẩn bị</a>
+  </div>
+  <a href="index.html#planner-section" class="btn btn-accent btn-sm navbar-cta">
+    <i class="fas fa-magic"></i> Lập kế hoạch
+  </a>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+</nav>
+
+<!-- ── Page Hero ── -->
+<div class="page-hero">
+  <div class="container">
+    <div class="hero-badge" style="display:inline-flex;margin-bottom:16px;">
+      <i class="fas fa-route"></i> Lộ Trình Thông Minh
+    </div>
+    <h1>Tạo Lộ Trình Của Bạn</h1>
+    <p>Chỉ mất 2 phút — chọn thời gian, sở thích và nhóm. Hệ thống tự động tạo lộ trình tối ưu cho chuyến đi của bạn.</p>
+  </div>
+</div>
+
+<!-- ── Main Content ── -->
+<div class="container" style="padding: 48px 24px;">
+  <div style="display:grid;grid-template-columns:1fr 360px;gap:32px;align-items:start;">
+
+    <!-- Wizard -->
+    <div>
+      <div class="itinerary-wizard" id="wizard">
+        <!-- Step Indicators -->
+        <div class="wizard-steps">
+          <div class="wizard-step active" id="step-tab-1">
+            <div class="wizard-step-num">1</div>
+            Thời gian
+          </div>
+          <div class="wizard-step" id="step-tab-2">
+            <div class="wizard-step-num">2</div>
+            Sở thích
+          </div>
+          <div class="wizard-step" id="step-tab-3">
+            <div class="wizard-step-num">3</div>
+            Nhóm
+          </div>
+          <div class="wizard-step" id="step-tab-4">
+            <div class="wizard-step-num">4</div>
+            Lộ trình
+          </div>
+        </div>
+
+        <!-- Step 1: Days -->
+        <div class="wizard-panel" id="step-1">
+          <h3>Bạn có bao nhiêu ngày?</h3>
+          <p style="color:var(--text-muted);margin-bottom:24px;">Chọn số ngày cho chuyến đi của bạn</p>
+          <div class="days-slider" id="daysGrid">
+            <!-- Filled by JS -->
+          </div>
+          <div style="background:var(--bg);border-radius:var(--radius-sm);padding:16px;margin-bottom:24px;" id="dayDescription">
+            <p style="font-size:.875rem;color:var(--text-muted);"></p>
+          </div>
+          <div class="wizard-action-bar">
+            <button class="btn btn-primary" onclick="goStep(2)">
+              Tiếp theo <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 2: Interests -->
+        <div class="wizard-panel hidden" id="step-2">
+          <h3>Bạn thích khám phá gì?</h3>
+          <p style="color:var(--text-muted);margin-bottom:24px;">Có thể chọn nhiều loại</p>
+          <div class="option-grid">
+            <div class="option-card" data-interest="history" onclick="toggleInterest(this)">
+              <div class="option-icon">🏛️</div>
+              <div class="option-label">Lịch sử</div>
+              <div class="option-sub">Di tích chiến tranh, thành cổ</div>
+            </div>
+            <div class="option-card" data-interest="nature" onclick="toggleInterest(this)">
+              <div class="option-icon">🌿</div>
+              <div class="option-label">Thiên nhiên</div>
+              <div class="option-sub">Rừng, thác, suối nước nóng</div>
+            </div>
+            <div class="option-card" data-interest="beach" onclick="toggleInterest(this)">
+              <div class="option-icon">🏖️</div>
+              <div class="option-label">Biển & Đảo</div>
+              <div class="option-sub">Cửa Tùng, Cửa Việt, Cồn Cỏ</div>
+            </div>
+            <div class="option-card" data-interest="religion" onclick="toggleInterest(this)">
+              <div class="option-icon">⛩️</div>
+              <div class="option-label">Tâm linh</div>
+              <div class="option-sub">La Vang, chùa, lễ hội</div>
+            </div>
+            <div class="option-card" data-interest="food" onclick="toggleInterest(this)">
+              <div class="option-icon">🍜</div>
+              <div class="option-label">Ẩm thực</div>
+              <div class="option-sub">Hải sản, đặc sản địa phương</div>
+            </div>
+            <div class="option-card" data-interest="adventure" onclick="toggleInterest(this)">
+              <div class="option-icon">🧗</div>
+              <div class="option-label">Phiêu lưu</div>
+              <div class="option-sub">Trekking, lặn biển, phượt</div>
+            </div>
+          </div>
+          <div class="wizard-action-bar" style="display:flex;gap:12px;">
+            <button class="btn btn-outline" onclick="goStep(1)">
+              <i class="fas fa-arrow-left"></i> Quay lại
+            </button>
+            <button class="btn btn-primary" onclick="goStep(3)">
+              Tiếp theo <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 3: Group -->
+        <div class="wizard-panel hidden" id="step-3">
+          <h3>Bạn đi với ai?</h3>
+          <p style="color:var(--text-muted);margin-bottom:24px;">Giúp chúng tôi gợi ý lộ trình phù hợp nhất</p>
+          <div class="option-grid">
+            <div class="option-card" data-group="solo" onclick="selectGroup(this)">
+              <div class="option-icon">🧍</div>
+              <div class="option-label">Một mình</div>
+              <div class="option-sub">Solo travel</div>
+            </div>
+            <div class="option-card" data-group="couple" onclick="selectGroup(this)">
+              <div class="option-icon">💑</div>
+              <div class="option-label">Cặp đôi</div>
+              <div class="option-sub">Lãng mạn & thư giãn</div>
+            </div>
+            <div class="option-card" data-group="friends" onclick="selectGroup(this)">
+              <div class="option-icon">👫</div>
+              <div class="option-label">Nhóm bạn</div>
+              <div class="option-sub">Vui vẻ & năng động</div>
+            </div>
+            <div class="option-card" data-group="family" onclick="selectGroup(this)">
+              <div class="option-icon">👨‍👩‍👧‍👦</div>
+              <div class="option-label">Gia đình</div>
+              <div class="option-sub">Phù hợp trẻ em & ông bà</div>
+            </div>
+          </div>
+          <div class="wizard-action-bar" style="display:flex;gap:12px;">
+            <button class="btn btn-outline" onclick="goStep(2)">
+              <i class="fas fa-arrow-left"></i> Quay lại
+            </button>
+            <button class="btn btn-primary" id="generateBtn" onclick="generateItinerary()">
+              <i class="fas fa-magic"></i> Tạo lộ trình!
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 4: Result -->
+        <div class="wizard-panel hidden" id="step-4">
+          <div id="itineraryOutput"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar: Quick templates -->
+    <div class="print-hide">
+      <div class="card" style="padding:24px;margin-bottom:20px;">
+        <h4 style="margin-bottom:16px;">⚡ Lộ Trình Mẫu</h4>
+        <p style="font-size:.85rem;color:var(--text-muted);margin-bottom:16px;">Chọn ngay một trong các lộ trình được thiết kế sẵn</p>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <button class="btn btn-outline btn-sm" onclick="loadTemplate('1day-history')" style="justify-content:flex-start;">
+            🏛️ 1 ngày · Lịch sử
+          </button>
+          <button class="btn btn-outline btn-sm" onclick="loadTemplate('1day-nature')" style="justify-content:flex-start;">
+            🌿 1 ngày · Thiên nhiên & Biển
+          </button>
+          <button class="btn btn-outline btn-sm" onclick="loadTemplate('2day-comprehensive')" style="justify-content:flex-start;">
+            📅 2 ngày · Toàn diện
+          </button>
+          <button class="btn btn-primary btn-sm" onclick="loadTemplate('3day-full')" style="justify-content:flex-start;">
+            🗺️ 3 ngày · Trọn vẹn Quảng Trị
+          </button>
+        </div>
+      </div>
+
+      <div class="card" style="padding:24px;">
+        <h4 style="margin-bottom:14px;">📌 Gợi ý lưu ý</h4>
+        <ul style="list-style:none;font-size:.84rem;">
+          <li style="padding:8px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;">
+            <span>🌤️</span> Đặt lịch sáng sớm cho các di tích lịch sử
+          </li>
+          <li style="padding:8px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;">
+            <span>🏖️</span> Biển đẹp nhất tháng 5–8
+          </li>
+          <li style="padding:8px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;">
+            <span>🏝️</span> Đảo Cồn Cỏ đặt tàu trước 1 tuần
+          </li>
+          <li style="padding:8px 0;display:flex;gap:8px;">
+            <span>🚗</span> Thuê xe máy từ Đông Hà là tốt nhất
+          </li>
+        </ul>
+        <a href="tips.html" class="btn btn-ghost btn-sm" style="margin-top:14px;background:var(--bg);color:var(--primary);border-color:var(--border);width:100%;justify-content:center;">
+          Xem tất cả mẹo →
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <span class="toast-icon">✅</span>
+  <span id="toastMsg">Đã lưu</span>
+</div>
+
+<!-- Footer compact -->
+<footer style="background:var(--text);color:rgba(255,255,255,.7);text-align:center;padding:24px;font-size:.85rem;margin-top:48px;">
+  <div>© 2025 ExploreQuảngTrị.com · <a href="index.html" style="color:var(--accent-light);">Trang chủ</a> · <a href="map.html" style="color:var(--accent-light);">Bản đồ</a></div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/itinerary.js"></script>
+</body>
+</html>
