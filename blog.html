@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Review & Blog Du Lịch Quảng Trị | Explore Quảng Trị</title>
+  <meta name="description" content="Review thực tế và bài viết blog du lịch Quảng Trị: kinh nghiệm, cảm nhận địa điểm, ẩm thực, lưu trú từ du khách thực tế.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/navbar.js" defer></script>
+  <style>
+/* ── Page header ── */
+.blog-hero {
+  background: linear-gradient(160deg, #0d1b2a 0%, #1b263b 50%, #0a1628 100%);
+  padding: 110px 0 64px; text-align: center; color: #fff; position: relative; overflow: hidden;
+}
+.blog-hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='20'/%3E%3C/g%3E%3C/svg%3E");
+}
+.blog-hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
+  color: rgba(255,255,255,.9); padding: 6px 18px; border-radius: 100px;
+  font-size: .75rem; font-weight: 700; margin-bottom: 20px; position: relative;
+}
+.blog-hero h1 { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 900; color: #fff; margin-bottom: 14px; position: relative; }
+.blog-hero h1 em { font-style: normal; color: #f5a623; }
+.blog-hero p { color: rgba(255,255,255,.75); font-size: 1rem; max-width: 520px; margin: 0 auto; line-height: 1.7; position: relative; }
+
+/* ── Filter tabs ── */
+.blog-filter-bar {
+  position: sticky; top: 64px; z-index: 100;
+  background: rgba(248,249,252,.97); backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--c-border);
+  padding: 14px 0;
+}
+.blog-filter-inner {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  max-width: 1200px; margin: 0 auto; padding: 0 24px;
+}
+.blog-tab {
+  padding: 7px 18px; border-radius: 100px;
+  border: 1.5px solid var(--c-border); background: var(--c-surface);
+  font-size: .8rem; font-weight: 700; color: var(--c-muted);
+  cursor: pointer; font-family: var(--font); transition: all .18s;
+}
+.blog-tab:hover { border-color: var(--c-primary); color: var(--c-primary); }
+.blog-tab.active { background: var(--c-primary); border-color: var(--c-primary); color: #fff; }
+.blog-search {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--c-surface); border: 1.5px solid var(--c-border);
+  border-radius: 100px; padding: 7px 16px; margin-left: auto;
+  min-width: 200px;
+}
+.blog-search i { color: var(--c-muted); font-size: .8rem; }
+.blog-search input { border: none; background: none; outline: none; font-size: .82rem; font-family: var(--font); color: var(--c-text); width: 100%; }
+
+/* ── Grid ── */
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+@media (max-width:960px) { .blog-grid { grid-template-columns: repeat(2,1fr); } }
+@media (max-width:560px)  { .blog-grid { grid-template-columns: 1fr; } }
+
+/* ── Post card ── */
+.blog-card {
+  background: var(--c-surface); border-radius: 18px; overflow: hidden;
+  border: 1.5px solid var(--c-border);
+  display: flex; flex-direction: column;
+  transition: transform .25s, box-shadow .25s, border-color .2s;
+  cursor: pointer;
+}
+.blog-card:hover { transform: translateY(-5px); box-shadow: 0 16px 48px rgba(0,0,0,.12); border-color: var(--c-primary); }
+
+.blog-card-img {
+  position: relative; height: 220px; overflow: hidden; background: #1a2e3a;
+}
+.blog-card-img img {
+  width: 100%; height: 100%; object-fit: cover;
+  opacity: 0; transition: opacity .8s;
+}
+.blog-card-img img.loaded { opacity: 1; }
+.blog-card-img .img-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,.45) 0%, transparent 60%);
+}
+.blog-card-type {
+  position: absolute; top: 14px; left: 14px;
+  font-size: .65rem; font-weight: 800; padding: 4px 12px; border-radius: 100px;
+  backdrop-filter: blur(8px); color: #fff;
+}
+.blog-card-type.review { background: rgba(245,166,35,.85); }
+.blog-card-type.blog   { background: rgba(41,128,185,.85); }
+.blog-card-type.tip    { background: rgba(39,174,96,.85); }
+
+.blog-card-body { padding: 20px 22px; flex: 1; display: flex; flex-direction: column; }
+.blog-card-meta {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+  font-size: .72rem; color: var(--c-muted);
+}
+.blog-card-meta .author-avatar {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--c-primary); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .7rem; font-weight: 800; flex-shrink: 0;
+}
+.blog-card-title { font-size: 1rem; font-weight: 800; line-height: 1.4; margin-bottom: 10px; color: var(--c-text); }
+.blog-card-excerpt { font-size: .82rem; color: var(--c-muted); line-height: 1.65; flex: 1; }
+.blog-card-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--c-border);
+}
+.blog-card-dest {
+  display: flex; align-items: center; gap: 6px;
+  font-size: .72rem; color: var(--c-muted);
+}
+.blog-card-rating { display: flex; align-items: center; gap: 4px; }
+.blog-card-stars { color: #f5a623; font-size: .8rem; }
+.blog-card-score { font-size: .8rem; font-weight: 800; }
+.blog-card-read { font-size: .75rem; font-weight: 700; color: var(--c-primary); }
+
+/* ── Featured review (full-width) ── */
+.blog-featured {
+  background: var(--c-surface); border-radius: 20px; overflow: hidden;
+  border: 1.5px solid var(--c-border); margin-bottom: 36px;
+  display: grid; grid-template-columns: 1fr 1fr;
+}
+@media (max-width:680px) { .blog-featured { grid-template-columns: 1fr; } }
+.blog-featured-img { position: relative; min-height: 320px; overflow: hidden; background: #0d2036; }
+.blog-featured-img img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .8s; }
+.blog-featured-img img.loaded { opacity: 1; }
+.blog-featured-img .img-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(0,0,0,.3), transparent); }
+.blog-featured-badge {
+  position: absolute; top: 16px; left: 16px;
+  background: #f5a623; color: #fff; font-size: .65rem; font-weight: 800;
+  padding: 5px 14px; border-radius: 100px;
+}
+.blog-featured-body { padding: 36px 32px; display: flex; flex-direction: column; justify-content: center; }
+.blog-featured-type { font-size: .7rem; font-weight: 800; color: var(--c-primary); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 10px; }
+.blog-featured-title { font-size: 1.5rem; font-weight: 900; line-height: 1.3; margin-bottom: 14px; }
+.blog-featured-excerpt { font-size: .88rem; color: var(--c-muted); line-height: 1.75; margin-bottom: 20px; }
+.blog-featured-meta { display: flex; align-items: center; gap: 14px; font-size: .75rem; color: var(--c-muted); }
+.blog-featured-author { display: flex; align-items: center; gap: 8px; }
+.blog-featured-author .av {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--c-primary); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .8rem; font-weight: 800;
+}
+.blog-featured-stars { color: #f5a623; font-size: .9rem; }
+
+/* ── Write review CTA ── */
+.write-review-box {
+  background: linear-gradient(145deg, #1b3a5c, #0d2036);
+  border-radius: 20px; padding: 40px 36px; text-align: center; color: #fff;
+  margin-top: 48px;
+}
+.write-review-box h3 { font-size: 1.4rem; font-weight: 900; margin-bottom: 10px; }
+.write-review-box p { opacity: .8; font-size: .9rem; margin-bottom: 24px; line-height: 1.6; }
+.write-review-box .btn { min-width: 180px; justify-content: center; }
+
+/* ── Pagination ── */
+.blog-pagination {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  margin-top: 48px;
+}
+.page-btn {
+  width: 40px; height: 40px; border-radius: 10px;
+  border: 1.5px solid var(--c-border); background: var(--c-surface);
+  font-size: .85rem; font-weight: 700; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--c-muted); font-family: var(--font); transition: all .18s;
+}
+.page-btn:hover, .page-btn.active { background: var(--c-primary); border-color: var(--c-primary); color: #fff; }
+  </style>
+</head>
+<body class="page-normal">
+
+
+<!-- HERO -->
+<div class="blog-hero">
+  <div class="blog-hero-eyebrow">✍️ Review & Blog Du Lịch</div>
+  <h1>Cảm Nhận <em>Thực Tế</em><br>Từ Du Khách</h1>
+  <p>Review địa điểm, ẩm thực, lưu trú và những câu chuyện du lịch chân thực từ những người đã đặt chân đến Quảng Trị.</p>
+</div>
+
+<!-- FILTER BAR -->
+<div class="blog-filter-bar">
+  <div class="blog-filter-inner">
+    <button class="blog-tab active" data-type="all">🗂️ Tất cả</button>
+    <button class="blog-tab" data-type="review">⭐ Review địa điểm</button>
+    <button class="blog-tab" data-type="food">🍜 Ẩm thực</button>
+    <button class="blog-tab" data-type="stay">🏨 Lưu trú</button>
+    <button class="blog-tab" data-type="blog">📖 Câu chuyện</button>
+    <button class="blog-tab" data-type="tip">💡 Mẹo hay</button>
+    <div class="blog-search">
+      <i class="fas fa-search"></i>
+      <input type="text" id="blogSearch" placeholder="Tìm bài viết...">
+    </div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="container section" style="padding-top:40px;">
+
+  <!-- Featured -->
+  <div class="blog-featured" id="blogFeatured"></div>
+
+  <!-- Grid heading -->
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+    <h2 style="font-size:1.2rem;font-weight:800;">Bài viết mới nhất</h2>
+    <span id="blogCount" style="font-size:.8rem;color:var(--c-muted);"></span>
+  </div>
+
+  <!-- Grid -->
+  <div class="blog-grid" id="blogGrid"></div>
+
+  <!-- Pagination -->
+  <div class="blog-pagination" id="blogPagination"></div>
+
+  <!-- Write review CTA -->
+  <div class="write-review-box">
+    <h3>📝 Bạn đã đến Quảng Trị?</h3>
+    <p>Chia sẻ trải nghiệm, review địa điểm hoặc viết câu chuyện du lịch của bạn.<br>Cộng đồng sẽ cảm ơn sự đóng góp chân thực từ bạn!</p>
+    <a href="https://zalo.me/0337788044" target="_blank" class="btn btn-accent btn-lg">
+      <i class="fas fa-pen-alt"></i> Gửi review cho chúng tôi
+    </a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer style="background:var(--c-text);color:rgba(255,255,255,.7);text-align:center;padding:28px;font-size:.82rem;margin-top:48px;">
+  <div>© 2025 Explore Quảng Trị ·
+    <a href="index.html" style="color:rgba(255,255,255,.7);">Trang chủ</a> ·
+    <a href="destinations.html" style="color:rgba(255,255,255,.7);">Địa điểm</a>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script>
+// ── Sample blog/review data ───────────────────────────────
+const POSTS = [
+  {
+    id: 1, type: 'review', featured: true,
+    title: 'Thành Cổ Quảng Trị — Nơi lịch sử còn thổn thức',
+    excerpt: 'Tôi đến Thành Cổ vào một buổi sáng tháng 7. Không khí tĩnh lặng đến kỳ lạ. Hàng cây xanh mát bao quanh bức tường thành cũ kỹ, hoa sen nở rộ trên hồ... Chỉ 30 phút ngồi yên trong đó, tôi hiểu vì sao người ta gọi đây là "vùng đất thiêng".',
+    dest: 'Thành Cổ Quảng Trị', destId: 1,
+    author: 'Minh Tuấn', authorInitial: 'MT',
+    date: '15/05/2025', readTime: '5 phút',
+    rating: 5,
+    img: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80',
+    tags: ['lịch sử', 'tâm linh', 'quảng trị'],
+  },
+  {
+    id: 2, type: 'review', featured: false,
+    title: 'Địa đạo Vịnh Mốc: Đi để hiểu sức mạnh con người Việt',
+    excerpt: 'Chui vào đường hầm tối tăm ẩm ướt, tôi cảm nhận được cái lạnh buốt và bóng tối dày đặc. Hướng dẫn viên kể về 17 đứa trẻ được sinh ra ở đây — tôi không kiềm được xúc động.',
+    dest: 'Địa đạo Vịnh Mốc', destId: 3,
+    author: 'Lan Anh', authorInitial: 'LA',
+    date: '02/05/2025', readTime: '4 phút',
+    rating: 5,
+    img: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80',
+    tags: ['địa đạo', 'chiến tranh', 'lịch sử'],
+  },
+  {
+    id: 3, type: 'food', featured: false,
+    title: 'Bún bò Đông Hà — Tô bún thay đổi định nghĩa "ngon" của tôi',
+    excerpt: 'Sáng sớm 6h30, quán đã đông nghẹt. Tô bún màu đỏ sẫm, nước dùng sánh đậm mùi sả gừng... Sau 10 năm ăn bún bò Huế, tôi mới biết Quảng Trị có phong cách riêng ngon không kém.',
+    dest: 'Đông Hà', destId: null,
+    author: 'Hải Đăng', authorInitial: 'HĐ',
+    date: '28/04/2025', readTime: '3 phút',
+    rating: 5,
+    img: 'https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=800&q=80',
+    tags: ['ẩm thực', 'bún bò', 'đông hà'],
+  },
+  {
+    id: 4, type: 'review', featured: false,
+    title: 'Hang Sơn Đoòng: Giá 3000 USD có xứng đáng không?',
+    excerpt: 'Câu trả lời ngắn: CÓ. Câu trả lời dài: Đây là trải nghiệm duy nhất trong đời tôi mà tôi không tìm được từ nào để mô tả. Khi đứng dưới "mây trong lòng đất" nhìn lên lỗ thủng trần hang — tôi khóc.',
+    dest: 'Hang Sơn Đoòng', destId: 19,
+    author: 'Thu Hương', authorInitial: 'TH',
+    date: '20/04/2025', readTime: '8 phút',
+    rating: 5,
+    img: 'https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?w=800&q=80',
+    tags: ['sơn đoòng', 'hang động', 'quảng bình'],
+  },
+  {
+    id: 5, type: 'stay', featured: false,
+    title: 'Phong Nha Farmstay — Nơi lưu trú đẹp nhất tôi từng ở',
+    excerpt: 'Bungalow gỗ nhìn ra sông Son. Buổi sáng tiếng chim hót, chiều tắm sông, tối ngồi bar uống bia nhìn núi. 3 ngày ở đây tôi quên mất mình đang "đi du lịch" — cảm giác như về nhà.',
+    dest: 'Phong Nha Farmstay', destId: 17,
+    author: 'Bảo Trân', authorInitial: 'BT',
+    date: '12/04/2025', readTime: '5 phút',
+    rating: 5,
+    img: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80',
+    tags: ['lưu trú', 'ecolodge', 'phong nha'],
+  },
+  {
+    id: 6, type: 'tip', featured: false,
+    title: '7 điều phải biết trước khi đến Quảng Trị lần đầu',
+    excerpt: 'Sau 4 chuyến đi trong 2 năm, tôi rút ra được những kinh nghiệm xương máu: thời điểm đến, cách di chuyển, đừng bỏ qua điều gì, và quan trọng nhất — hãy thuê hướng dẫn viên địa phương.',
+    dest: 'Quảng Trị', destId: null,
+    author: 'Quốc Hưng', authorInitial: 'QH',
+    date: '05/04/2025', readTime: '6 phút',
+    rating: null,
+    img: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80',
+    tags: ['mẹo', 'kinh nghiệm', 'lần đầu'],
+  },
+  {
+    id: 7, type: 'blog', featured: false,
+    title: 'Một mình xuyên Quảng Trị — Hành trình 5 ngày solo',
+    excerpt: 'Tôi một mình, một balo, một chiếc xe máy thuê 150k/ngày. 5 ngày 4 đêm qua 12 địa điểm từ Thành Cổ đến Phong Nha. Đây là câu chuyện của tôi.',
+    dest: 'Toàn tỉnh', destId: null,
+    author: 'Việt Dũng', authorInitial: 'VD',
+    date: '30/03/2025', readTime: '10 phút',
+    rating: null,
+    img: 'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=800&q=80',
+    tags: ['solo travel', 'xe máy', 'hành trình'],
+  },
+  {
+    id: 8, type: 'review', featured: false,
+    title: 'Biển Cửa Tùng buổi sáng — Đẹp hơn mọi bức ảnh',
+    excerpt: 'Tôi đến lúc 5h45 sáng. Bầu trời còn chưa sáng hẳn. Cát hồng nhạt, sóng êm, tuyệt không một bóng người. Đó là 45 phút yên bình nhất tôi từng có trong một chuyến du lịch.',
+    dest: 'Biển Cửa Tùng', destId: 10,
+    author: 'Ngọc Mai', authorInitial: 'NM',
+    date: '22/03/2025', readTime: '3 phút',
+    rating: 5,
+    img: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80',
+    tags: ['biển', 'cửa tùng', 'bình minh'],
+  },
+  {
+    id: 9, type: 'food', featured: false,
+    title: 'Hải sản Cửa Việt — Tươi ngon theo đúng nghĩa đen',
+    excerpt: 'Con tôm vừa ra khỏi lồng là đã lên bàn. Cua ghẹ giá rẻ bằng 1/3 Hà Nội. Ăn xong mà tay còn dính mùi biển thơm phức — đó mới là hải sản thật sự.',
+    dest: 'Cửa Việt', destId: null,
+    author: 'Thanh Bình', authorInitial: 'TB',
+    date: '15/03/2025', readTime: '4 phút',
+    rating: 5,
+    img: 'https://images.unsplash.com/photo-1533777857889-4be7c70b33f7?w=800&q=80',
+    tags: ['hải sản', 'cửa việt', 'ẩm thực'],
+  },
+];
+
+const TYPE_LABELS = {
+  review: '⭐ Review', food: '🍜 Ẩm thực',
+  stay: '🏨 Lưu trú', blog: '📖 Câu chuyện', tip: '💡 Mẹo hay',
+};
+
+let activeType = 'all', searchQ = '', currentPage = 1;
+const PER_PAGE = 6;
+
+function getFiltered() {
+  let posts = POSTS.filter(p => !p.featured || activeType !== 'all'); // featured shown separately
+  if (activeType !== 'all') posts = POSTS.filter(p => p.type === activeType);
+  if (searchQ) posts = posts.filter(p =>
+    p.title.toLowerCase().includes(searchQ) ||
+    p.excerpt.toLowerCase().includes(searchQ) ||
+    p.dest.toLowerCase().includes(searchQ) ||
+    p.tags.some(t => t.includes(searchQ))
+  );
+  return posts;
+}
+
+function renderFeatured() {
+  const featured = POSTS.find(p => p.featured && (activeType === 'all' || p.type === activeType));
+  const el = document.getElementById('blogFeatured');
+  if (!featured || searchQ) { el.hidden = true; return; }
+  el.hidden = false;
+  el.onclick = () => location.href = `post.html?id=${featured.id}`;
+  el.style.cursor = 'pointer';
+  el.innerHTML = `
+    <div class="blog-featured-img">
+      <img src="${featured.img}" alt="${featured.title}" loading="lazy" onload="this.classList.add('loaded')" onerror="this.remove()">
+      <div class="img-overlay"></div>
+      <div class="blog-featured-badge">✨ Nổi bật</div>
+    </div>
+    <div class="blog-featured-body">
+      <div class="blog-featured-type">${TYPE_LABELS[featured.type] || featured.type}</div>
+      <h2 class="blog-featured-title">${featured.title}</h2>
+      <p class="blog-featured-excerpt">${featured.excerpt}</p>
+      <div class="blog-featured-meta">
+        <div class="blog-featured-author">
+          <div class="av">${featured.authorInitial}</div>
+          <div><strong>${featured.author}</strong><br><span style="opacity:.65;">${featured.date}</span></div>
+        </div>
+        ${featured.rating ? `<div class="blog-featured-stars">${'★'.repeat(featured.rating)}</div>` : ''}
+        <span>${featured.readTime} đọc</span>
+        <a href="post.html?id=${featured.id}" style="margin-left:auto;color:var(--c-primary);font-weight:700;">Đọc tiếp →</a>
+      </div>
+    </div>`;
+}
+
+function renderGrid() {
+  const list = getFiltered();
+  const nonFeatured = activeType === 'all' ? list.filter(p => !p.featured) : list;
+  const total = nonFeatured.length;
+  const paged = nonFeatured.slice((currentPage-1)*PER_PAGE, currentPage*PER_PAGE);
+
+  document.getElementById('blogCount').textContent = `${total} bài viết`;
+
+  const grid = document.getElementById('blogGrid');
+  grid.innerHTML = paged.map(p => `
+    <a class="blog-card" href="post.html?id=${p.id}" style="text-decoration:none;color:inherit;">
+      <div class="blog-card-img">
+        <img src="${p.img}" alt="" loading="lazy" onload="this.classList.add('loaded')" onerror="this.remove()">
+        <div class="img-overlay"></div>
+        <span class="blog-card-type ${p.type}">${TYPE_LABELS[p.type] || p.type}</span>
+      </div>
+      <div class="blog-card-body">
+        <div class="blog-card-meta">
+          <div class="author-avatar">${p.authorInitial}</div>
+          <span>${p.author}</span>
+          <span>·</span>
+          <span>${p.date}</span>
+          <span>·</span>
+          <span>${p.readTime}</span>
+        </div>
+        <h3 class="blog-card-title">${p.title}</h3>
+        <p class="blog-card-excerpt">${p.excerpt.slice(0,120)}…</p>
+        <div class="blog-card-footer">
+          <div class="blog-card-dest"><i class="fas fa-map-marker-alt" style="font-size:.65rem;"></i> ${p.dest}</div>
+          ${p.rating ? `<div class="blog-card-rating"><span class="blog-card-stars">${'★'.repeat(p.rating)}</span><span class="blog-card-score">${p.rating}.0</span></div>` : ''}
+          <span class="blog-card-read">Đọc →</span>
+        </div>
+      </div>
+    </a>`).join('') ||
+    `<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--c-muted);">
+      <div style="font-size:2.5rem;margin-bottom:12px;">🔍</div>
+      <p>Không tìm thấy bài viết phù hợp</p>
+    </div>`;
+
+  // Pagination
+  const pages = Math.ceil(total / PER_PAGE);
+  const pag = document.getElementById('blogPagination');
+  pag.innerHTML = pages > 1 ? Array.from({length:pages},(_,i)=>
+    `<button class="page-btn ${currentPage===i+1?'active':''}" onclick="goPage(${i+1})">${i+1}</button>`
+  ).join('') : '';
+}
+
+function goPage(n) { currentPage = n; renderGrid(); window.scrollTo({top: document.getElementById('blogGrid').offsetTop - 120, behavior:'smooth'}); }
+
+function render() { renderFeatured(); renderGrid(); }
+
+// Init
+document.addEventListener('DOMContentLoaded', () => {
+  render();
+
+  document.querySelectorAll('.blog-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.blog-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeType = btn.dataset.type;
+      currentPage = 1;
+      render();
+    });
+  });
+
+  let debounce;
+  document.getElementById('blogSearch').addEventListener('input', e => {
+    clearTimeout(debounce);
+    debounce = setTimeout(() => {
+      searchQ = e.target.value.trim().toLowerCase();
+      currentPage = 1;
+      render();
+    }, 250);
+  });
+});
+</script>
+</body>
+</html>

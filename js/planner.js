@@ -783,72 +783,7 @@ function toggleDestCard(card, id) {
 }
 
 function updateSelectionCount() {
-  const n = plannerState.selectedDests.size;
-  const el = document.getElementById('selectionCount');
-  if (el) el.textContent = n > 0 ? `${n} điểm` : 'Chọn điểm';
-  const bar = document.getElementById('selectionBar');
-  if (bar) bar.classList.toggle('visible', n > 0 || plannerState.currentStep > 1);
-  updateSmartBar();
   if (typeof renderStep1List === 'function') renderStep1List();
-}
-
-function updateSmartBar() {
-  const n    = plannerState.selectedDests.size;
-  const step = plannerState.currentStep;
-
-  // Pill 1 – destinations
-  const p1 = document.getElementById('pill-dests');
-  p1?.classList.toggle('done', n > 0);
-
-  // Pill 2 – trip info
-  const p2     = document.getElementById('pill-trip');
-  const p2Text = document.getElementById('pill-trip-text');
-  const tripDone = step >= 2;
-  p2?.classList.toggle('done', tripDone);
-  if (p2Text) p2Text.textContent = tripDone
-    ? `${plannerState.numPeople} người · ${plannerState.numDays} ngày`
-    : 'Hành trình';
-
-  // Pill 3 – services
-  const p3     = document.getElementById('pill-services');
-  const p3Text = document.getElementById('pill-services-text');
-  const svc = [plannerState.selectedHotel, plannerState.selectedTransport, plannerState.selectedFood];
-  const svcCount = svc.filter(Boolean).length;
-  p3?.classList.toggle('done', svcCount > 0);
-  if (p3Text) p3Text.textContent = svcCount > 0
-    ? `${svcCount}/3 dịch vụ`
-    : 'Dịch vụ';
-
-  // CTA button
-  const btn     = document.getElementById('startPlannerBtn');
-  const btnText = document.getElementById('smartBtnText');
-  if (!btn || !btnText) return;
-  btn.disabled = n === 0;
-  btn.classList.remove('pulse');
-
-  if (step === 4) {
-    btnText.textContent = 'Đặt lịch ngay';
-    btn.classList.add('pulse');
-  } else if (step === 3) {
-    btnText.textContent = 'Xem tóm tắt';
-  } else if (step === 2) {
-    btnText.textContent = 'Xem đề xuất';
-  } else {
-    btnText.textContent = 'Lên kế hoạch';
-  }
-}
-
-function smartBarAction() {
-  const step = plannerState.currentStep;
-  if (step === 2) {
-    if (typeof proceedStep2 === 'function') proceedStep2();
-  } else if (step === 3) {
-    if (typeof proceedStep3 === 'function') proceedStep3();
-  } else if (step === 4) {
-    document.querySelector('.contact-cta-box')?.scrollIntoView({ behavior: 'smooth' });
-  } else {
-    goToPlanner();
-  }
 }
 
 // ── Planner steps ─────────────────────────────────────────
@@ -914,7 +849,6 @@ function showSubStep(n) {
 
   // Update next-button labels based on current selection
   updateSubStepNextBtn(n);
-  updateSmartBar();
 }
 
 function updateSubStepNextBtn(n) {
@@ -1106,11 +1040,9 @@ function selectReco(type, idx) {
     plannerState.selectedFood = (plannerState.selectedFood?.name === item.name) ? null : item;
     renderRecoPanel('food');
   }
-  updateSmartBar();
 }
 
-// kept for backward compat (smart bar calls this indirectly)
-function updateRecoTabHeaders() { updateSmartBar(); }
+function updateRecoTabHeaders() {}
 function showRecoPanel() {}
 
 // Step 4: Summary & Cost

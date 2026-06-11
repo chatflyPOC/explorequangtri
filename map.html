@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <link rel="stylesheet" href="css/style.css">
+  <script src="js/navbar.js" defer></script>
   <style>
     body { overflow: hidden; }
     .map-layout { height: calc(100vh - 68px); margin-top: 68px; }
@@ -36,25 +37,6 @@
   </style>
 </head>
 <body>
-
-<!-- ── Navbar ── -->
-<nav class="navbar" id="navbar">
-  <a href="index.html" class="navbar-brand">
-    <div class="navbar-logo">🗺️</div>
-    <div class="navbar-name">Explore<span>Quảng Trị</span></div>
-  </a>
-  <div class="navbar-nav" id="navMenu">
-    <a href="index.html"             class="nav-link">🏠 Trang Chủ</a>
-    <a href="destinations.html"      class="nav-link">📍 Địa Điểm</a>
-    <a href="itinerary.html"         class="nav-link">📅 Lộ Trình</a>
-    <a href="services.html"          class="nav-link">🛎️ Dịch Vụ</a>
-    <a href="index.html#tips-section" class="nav-link">💡 Lưu ý & Chuẩn bị</a>
-  </div>
-  <a href="index.html#planner-section" class="btn btn-accent btn-sm navbar-cta">
-    <i class="fas fa-magic"></i> Lập kế hoạch
-  </a>
-  <div class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
-</nav>
 
 <!-- ── Map Layout ── -->
 <div class="map-layout">

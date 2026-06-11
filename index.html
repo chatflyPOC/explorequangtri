@@ -7,103 +7,242 @@
   <meta name="description" content="Khám phá Quảng Trị: Thành Cổ, Địa đạo Vịnh Mốc, Hang Sơn Đoòng, Động Phong Nha. Lập kế hoạch chuyến đi, ước tính chi phí, đề xuất khách sạn – nhà hàng – di chuyển.">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
+  <script src="js/navbar.js" defer></script>
   <style>
 /* ════════════════════════════════════════════════════════════
    INDEX PAGE STYLES
    ════════════════════════════════════════════════════════════ */
 
-/* ── Hero ── */
-.hero-new {
-  min-height: 100vh;
-  background: linear-gradient(160deg, #051c10 0%, #0d3a24 40%, #0a2a5c 100%);
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  text-align: center; padding: 120px 24px 80px; position: relative; overflow: hidden;
+/* ════════════════════════════════════════════
+   TYPE SCALE (Major Third 1.25 — base 16px)
+   xs=12 sm=14 base=15 md=18 lg=20 xl=24
+   2xl=30 3xl=36 4xl=44 hero=clamp
+   ════════════════════════════════════════════ */
+
+/* ══ HERO SLIDESHOW ═══════════════════════════════════════════ */
+.hs {
+  position: relative; height: 100svh; min-height: 620px;
+  overflow: hidden; display: flex; align-items: center; justify-content: center;
 }
-.hero-new::before {
-  content: '';
+.hs-track { position: absolute; inset: 0; }
+.hs-slide {
   position: absolute; inset: 0;
-  background: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M40 0L80 40L40 80L0 40z'/%3E%3C/g%3E%3C/svg%3E");
+  opacity: 0; transition: opacity 1.5s cubic-bezier(.25,.46,.45,.94);
+  will-change: opacity;
 }
-.hero-eyebrow {
+.hs-slide.active { opacity: 1; }
+.hs-bg {
+  position: absolute; inset: -6%;
+  background-size: cover; background-position: center;
+}
+.hs-slide.active .hs-bg { animation: hsKb 10s ease-out forwards; }
+@keyframes hsKb { from { transform: scale(1); } to { transform: scale(1.1); } }
+
+/* ── Slide gradient backgrounds ─────────────────────────────
+   Thay bằng ảnh thực: thêm background-image: url('images/ten-anh.jpg') trước gradient
+   ─────────────────────────────────────────────────────────── */
+.hs-bg-1 {
+  background:
+    radial-gradient(ellipse at 72% 58%, rgba(210,85,15,.85) 0%, rgba(150,55,8,.45) 28%, transparent 52%),
+    radial-gradient(ellipse at 22% 75%, rgba(130,45,5,.55) 0%, transparent 38%),
+    linear-gradient(162deg, #060202 0%, #1e0a07 32%, #3a1008 58%, #1e0a07 82%, #060202 100%);
+}
+.hs-bg-2 {
+  background:
+    radial-gradient(ellipse at 50% -8%, rgba(200,238,255,.38) 0%, transparent 42%),
+    radial-gradient(ellipse at 50% 100%, rgba(0,110,185,.58) 0%, transparent 38%),
+    radial-gradient(ellipse at 78% 42%, rgba(0,130,195,.32) 0%, transparent 28%),
+    linear-gradient(182deg, #000a16 0%, #001628 32%, #002244 58%, #003668 82%, #004e88 100%);
+}
+.hs-bg-3 {
+  background:
+    radial-gradient(ellipse at 50% 16%, rgba(85,138,10,.55) 0%, transparent 38%),
+    radial-gradient(ellipse at 50% 68%, rgba(65,32,0,.78) 0%, transparent 40%),
+    radial-gradient(ellipse at 28% 35%, rgba(12,28,3,.85) 0%, transparent 26%),
+    linear-gradient(180deg, #000a00 0%, #060e00 26%, #0d1a00 52%, #090d00 76%, #010400 100%);
+}
+.hs-bg-4 {
+  background:
+    radial-gradient(ellipse at 50% 62%, rgba(255,148,0,.78) 0%, rgba(215,65,0,.52) 24%, transparent 50%),
+    radial-gradient(ellipse at 50% 96%, rgba(255,108,0,.42) 0%, transparent 28%),
+    radial-gradient(ellipse at 14% 18%, rgba(45,12,0,.82) 0%, transparent 28%),
+    linear-gradient(180deg, #030006 0%, #1c0900 32%, #3e1500 60%, #601d00 80%, #7a2500 100%);
+}
+.hs-bg-5 {
+  background:
+    radial-gradient(ellipse at 50% 14%, rgba(128,210,28,.5) 0%, transparent 40%),
+    radial-gradient(ellipse at 18% 58%, rgba(28,75,5,.6) 0%, transparent 34%),
+    radial-gradient(ellipse at 78% 58%, rgba(42,105,10,.44) 0%, transparent 28%),
+    radial-gradient(ellipse at 50% 88%, rgba(12,35,2,.65) 0%, transparent 28%),
+    linear-gradient(162deg, #010700 0%, #050f01 26%, #0a1c02 52%, #0e2603 76%, #172f05 100%);
+}
+
+/* ── Overlay & grain ── */
+.hs-overlay {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    linear-gradient(to bottom, rgba(0,0,0,.08) 0%, rgba(0,0,0,.32) 45%, rgba(0,0,0,.76) 100%),
+    linear-gradient(to right, rgba(0,0,0,.28) 0%, transparent 38%, transparent 62%, rgba(0,0,0,.18) 100%);
+}
+.hs-grain {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  opacity: .55;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.68' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.07'/%3E%3C/svg%3E");
+}
+
+/* ── Content ── */
+.hs-content {
+  position: relative; z-index: 3; text-align: center; color: #fff;
+  padding: clamp(80px,12vw,120px) clamp(20px,6vw,80px) clamp(100px,14vw,148px);
+  max-width: 860px; width: 100%;
+}
+.hs-badge {
   display: inline-flex; align-items: center; gap: 8px;
   background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
-  color: rgba(255,255,255,.9); padding: 7px 20px; border-radius: 100px;
-  font-size: .8rem; font-weight: 600; margin-bottom: 24px;
-  backdrop-filter: blur(10px);
+  color: rgba(255,255,255,.92); backdrop-filter: blur(12px);
+  padding: 6px 18px; border-radius: 999px;
+  font-size: .82rem; font-weight: 600; letter-spacing: .02em; margin-bottom: 20px;
+  transition: opacity .35s ease, transform .35s ease;
+  opacity: 0; animation: hsEnter .9s .15s ease forwards;
 }
-.hero-new h1 {
-  font-size: clamp(2.2rem, 6vw, 4rem); font-weight: 800;
-  color: #fff; line-height: 1.1; margin-bottom: 18px;
+.hs-badge.hs-fade { opacity: 0; transform: translateY(-6px); }
+.hs-title {
+  font-size: clamp(2.25rem, 5.5vw, 3.875rem);
+  font-weight: 900; line-height: 1.15; margin-bottom: 14px;
+  text-shadow: 0 2px 32px rgba(0,0,0,.55);
+  opacity: 0; animation: hsEnter .9s .38s ease forwards;
 }
-.hero-new h1 em { font-style: normal; color: #f5a623; }
-.hero-subtitle {
-  color: rgba(255,255,255,.8); font-size: clamp(.95rem, 2vw, 1.15rem);
-  max-width: 600px; margin: 0 auto 36px; line-height: 1.7;
+.hs-title em { font-style: normal; color: #f5a623; }
+.hs-tagline {
+  font-size: clamp(.875rem, 1.65vw, 1.0625rem);
+  color: rgba(255,255,255,.62); font-style: italic;
+  margin-bottom: 12px; min-height: 1.6em;
+  transition: opacity .35s ease, transform .35s ease;
+  opacity: 0; animation: hsEnter .9s .52s ease forwards;
 }
-.hero-ctas { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 60px; }
-.hero-stats-row {
-  display: flex; gap: 40px; justify-content: center; flex-wrap: wrap;
-  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12);
-  border-radius: 20px; padding: 24px 40px; backdrop-filter: blur(12px);
+.hs-tagline.hs-fade { opacity: 0; transform: translateY(6px); }
+.hs-sub {
+  color: rgba(255,255,255,.7);
+  font-size: clamp(.875rem, 1.3vw, 1rem);
+  max-width: 500px; margin: 0 auto 34px; line-height: 1.8;
+  opacity: 0; animation: hsEnter .9s .66s ease forwards;
 }
-.hstat { text-align: center; color: #fff; }
-.hstat-num { font-size: 1.8rem; font-weight: 800; }
-.hstat-lbl { font-size: .75rem; opacity: .7; margin-top: 4px; }
-.hero-scroll-hint {
-  position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
-  color: rgba(255,255,255,.5); font-size: .78rem; display: flex; flex-direction: column;
-  align-items: center; gap: 7px; animation: bounceY 2s infinite;
+.hs-ctas {
+  display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 44px;
+  opacity: 0; animation: hsEnter .9s .82s ease forwards;
 }
-@keyframes bounceY { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(8px)} }
+
+/* ── Stats bar ── */
+.hs-stats {
+  display: inline-flex; flex-wrap: wrap;
+  background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+  border-radius: 16px; backdrop-filter: blur(18px); overflow: hidden;
+  opacity: 0; animation: hsEnter .9s 1s ease forwards;
+}
+.hs-stat {
+  padding: 14px 26px; text-align: center;
+  border-right: 1px solid rgba(255,255,255,.08);
+}
+.hs-stat:last-child { border-right: none; }
+.hs-stat-n {
+  display: block; font-size: 1.3rem; font-weight: 800; line-height: 1.2; margin-bottom: 3px;
+}
+.hs-stat-l { font-size: .68rem; opacity: .55; text-transform: uppercase; letter-spacing: .05em; white-space: nowrap; }
+
+/* ── Arrows ── */
+.hs-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  z-index: 4; width: 46px; height: 46px; border-radius: 50%;
+  background: rgba(255,255,255,.08); border: 1.5px solid rgba(255,255,255,.18);
+  color: rgba(255,255,255,.85); font-size: 1rem;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all .22s; backdrop-filter: blur(8px);
+  opacity: 0; pointer-events: none;
+}
+.hs:hover .hs-arrow { opacity: 1; pointer-events: auto; }
+.hs-arrow:hover { background: rgba(255,255,255,.22); color: #fff; border-color: rgba(255,255,255,.4); }
+.hs-prev { left: 20px; }
+.hs-next { right: 20px; }
+
+/* ── Dots ── */
+.hs-dots {
+  position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%);
+  z-index: 4; display: flex; gap: 8px; align-items: center;
+}
+.hs-dot {
+  width: 8px; height: 8px; border-radius: 4px;
+  background: rgba(255,255,255,.3); border: none;
+  cursor: pointer; transition: all .32s ease; padding: 0; flex-shrink: 0;
+}
+.hs-dot.active { width: 28px; background: #fff; }
+
+/* ── Progress bar ── */
+.hs-bar-wrap {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 3px; z-index: 5;
+  background: rgba(255,255,255,.12);
+}
+.hs-bar { height: 100%; width: 0; background: var(--c-accent); border-radius: 0 2px 2px 0; }
+
+/* ── Entry animation ── */
+@keyframes hsEnter {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Section headers (kept from original) ── */
 
 /* ── Section headers ── */
+/* eyebrow: 12px badge / h2: 2xl-3xl / lead: base */
 .section-eyebrow {
   display: inline-flex; align-items: center; gap: 6px;
   background: var(--c-primary-faint); color: var(--c-primary);
-  padding: 5px 14px; border-radius: 100px;
-  font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
-  margin-bottom: 12px;
+  min-height: 24px; padding: 0 12px;
+  border-radius: 999px; font-size: 0.75rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .06em; margin-bottom: 12px;
 }
-.section-head { font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 800; margin-bottom: 10px; }
-.section-lead { color: var(--c-muted); font-size: .95rem; max-width: 520px; line-height: 1.7; }
+/* 2xl=30px base, max 36px */
+.section-head { font-size: clamp(1.5rem, 2.5vw, 2rem); font-weight: 800; margin-bottom: 10px; line-height: 1.25; }
+.section-lead { color: var(--c-muted); font-size: 0.9375rem; max-width: 480px; line-height: 1.7; }
 
 /* ── Showcase destination cards ── */
+/* 3-col grid, 16px gap, card min-height 200px */
 .showcase-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  gap: 16px; /* 2×8 */
 }
 .showcase-card {
-  border-radius: 18px; overflow: hidden; cursor: pointer;
-  position: relative; padding: 28px 22px;
-  min-height: 200px; display: flex; flex-direction: column; justify-content: flex-end;
-  transition: transform .3s var(--ease), box-shadow .3s var(--ease);
-  border: 2px solid transparent;
-  user-select: none;
+  border-radius: 16px; overflow: hidden; cursor: pointer;
+  position: relative;
+  padding: 24px 20px;    /* 3×8 top / 2.5×8 sides */
+  min-height: 200px;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  transition: transform .28s var(--ease), box-shadow .28s var(--ease);
+  border: 2px solid transparent; user-select: none;
 }
 .showcase-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,.4); }
 .showcase-card.selected {
   border-color: #f5a623;
-  box-shadow: 0 0 0 4px rgba(245,166,35,.3), 0 12px 32px rgba(0,0,0,.4);
+  box-shadow: 0 0 0 3px rgba(245,166,35,.25), 0 12px 32px rgba(0,0,0,.4);
 }
-.sc-icon { font-size: 2.4rem; margin-bottom: 12px; position: relative; z-index: 2; }
+/* Card text — keep readable against dark overlay */
+.sc-icon { font-size: 2rem; margin-bottom: 8px; position: relative; z-index: 2; }
 .sc-content { position: relative; z-index: 2; }
-.sc-name { font-size: 1rem; font-weight: 800; color: #fff; line-height: 1.25; margin-bottom: 5px; }
-.sc-tagline { font-size: .75rem; color: rgba(255,255,255,.75); margin-bottom: 10px; line-height: 1.4; }
-.sc-badges { display: flex; gap: 5px; flex-wrap: wrap; }
+.sc-name { font-size: 0.9375rem; font-weight: 800; color: #fff; line-height: 1.3; margin-bottom: 4px; }  /* 15px */
+.sc-tagline { font-size: 0.75rem; color: rgba(255,255,255,.78); margin-bottom: 10px; line-height: 1.45; } /* 12px */
+.sc-badges { display: flex; gap: 4px; flex-wrap: wrap; }
 .sc-badge {
-  font-size: .65rem; font-weight: 700; padding: 2px 8px;
-  background: rgba(255,255,255,.18); color: #fff;
-  border-radius: 100px; border: 1px solid rgba(255,255,255,.25);
+  font-size: 0.6875rem; font-weight: 700;        /* 11px */
+  padding: 3px 8px; background: rgba(255,255,255,.18); color: #fff;
+  border-radius: 999px; border: 1px solid rgba(255,255,255,.25);
 }
+/* Check mark — 28px circle (3.5×8) */
 .sc-check {
-  position: absolute; top: 14px; right: 14px;
+  position: absolute; top: 12px; right: 12px;
   width: 28px; height: 28px; border-radius: 50%;
-  background: #f5a623; color: #fff; font-size: .85rem; font-weight: 800;
+  background: #f5a623; color: #fff; font-size: 0.875rem; font-weight: 800;
   display: flex; align-items: center; justify-content: center;
-  opacity: 0; transform: scale(0.5);
-  transition: opacity .2s, transform .2s;
-  z-index: 3;
+  opacity: 0; transform: scale(.5); transition: opacity .2s, transform .2s; z-index: 3;
 }
 .showcase-card.selected .sc-check { opacity: 1; transform: scale(1); }
 .sc-overlay {
@@ -121,116 +260,58 @@
 .sc-content { position: relative; z-index: 2; }
 .sc-check  { z-index: 3; }
 
-/* ── Smart sticky bar ── */
-.selection-bar {
-  position: fixed; bottom: 0; left: 0; right: 0; z-index: 500;
-  background: rgba(8,10,20,.97); backdrop-filter: blur(20px) saturate(1.5);
-  border-top: 1px solid rgba(255,255,255,.08);
-  padding: 10px 20px 12px;
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  transform: translateY(100%); transition: transform .35s cubic-bezier(.34,1.56,.64,1);
-}
-.selection-bar.visible { transform: translateY(0); }
-
-.smart-pills {
-  display: flex; align-items: center; gap: 6px; flex: 1; overflow: hidden;
-}
-.smart-pill {
-  display: flex; align-items: center; gap: 5px;
-  padding: 6px 12px; border-radius: 100px;
-  border: 1.5px solid rgba(255,255,255,.15);
-  color: rgba(255,255,255,.45); font-size: .72rem; font-weight: 600;
-  transition: all .25s; white-space: nowrap; flex-shrink: 0;
-}
-.smart-pill.done {
-  border-color: rgba(245,166,35,.6); color: #f5a623;
-  background: rgba(245,166,35,.1);
-}
-.smart-pill .pill-dot {
-  width: 6px; height: 6px; border-radius: 50%; background: currentColor;
-  flex-shrink: 0;
-}
-.smart-pill.done .pill-dot { background: #f5a623; }
-.smart-sep { color: rgba(255,255,255,.2); font-size: .8rem; flex-shrink: 0; }
-
-.smart-cta-btn {
-  flex-shrink: 0;
-  display: inline-flex; align-items: center; gap: 8px;
-  background: linear-gradient(135deg, #f5a623, #e67e22);
-  color: #fff; border: none; border-radius: 100px;
-  padding: 10px 22px; font-size: .875rem; font-weight: 800;
-  cursor: pointer; font-family: var(--font);
-  transition: all .2s; white-space: nowrap;
-  box-shadow: 0 4px 20px rgba(245,166,35,.4);
-}
-.smart-cta-btn:hover:not(:disabled) {
-  transform: scale(1.04); box-shadow: 0 6px 28px rgba(245,166,35,.6);
-}
-.smart-cta-btn:disabled {
-  background: rgba(255,255,255,.1); color: rgba(255,255,255,.3);
-  box-shadow: none; cursor: not-allowed;
-}
-.smart-cta-btn.pulse {
-  animation: ctaPulse 2s infinite;
-}
-@keyframes ctaPulse {
-  0%,100% { box-shadow: 0 4px 20px rgba(245,166,35,.4); }
-  50%      { box-shadow: 0 4px 36px rgba(245,166,35,.8); }
-}
 
 /* ── Planner section ── */
 .planner-section { background: var(--c-bg); }
-.step-progress {
-  display: flex; gap: 0; margin-bottom: 40px;
-}
+.step-progress { display: flex; gap: 0; margin-bottom: 40px; }
 .step-indicator {
   flex: 1; position: relative; text-align: center;
-  font-size: .75rem; font-weight: 600; color: var(--c-muted);
-  padding-bottom: 14px;
+  font-size: 0.75rem; font-weight: 600; color: var(--c-muted);
+  padding-bottom: 16px;
 }
 .step-indicator::after {
   content: ''; position: absolute; bottom: 0; left: 0; right: 0;
-  height: 3px; background: var(--c-border); border-radius: 2px;
+  height: 2px; background: var(--c-border); border-radius: 2px;
 }
-.step-indicator.done  { color: var(--c-primary); }
-.step-indicator.done::after  { background: var(--c-primary); }
+.step-indicator.done   { color: var(--c-primary); }
+.step-indicator.done::after   { background: var(--c-primary); }
 .step-indicator.active { color: var(--c-primary); font-weight: 700; }
 .step-indicator.active::after { background: var(--c-accent); }
+
+/* Step number — 32px circle (matches btn-sm) */
 .step-num {
-  width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--c-border);
-  background: var(--c-surface); color: var(--c-muted);
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 2px solid var(--c-border); background: var(--c-surface); color: var(--c-muted);
   display: flex; align-items: center; justify-content: center;
-  font-size: .75rem; font-weight: 800; margin: 0 auto 7px;
+  font-size: 0.8125rem; font-weight: 800; margin: 0 auto 8px;
 }
-.step-indicator.done  .step-num { background: var(--c-primary); color: #fff; border-color: var(--c-primary); }
-.step-indicator.active .step-num { background: var(--c-accent); color: #fff; border-color: var(--c-accent); }
+.step-indicator.done   .step-num { background: var(--c-primary); color: #fff; border-color: var(--c-primary); }
+.step-indicator.active .step-num { background: var(--c-accent);  color: #fff; border-color: var(--c-accent);  }
 
-.planner-step { padding: 0; }
-.planner-step h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
-.planner-step .step-subtitle { color: var(--c-muted); margin-bottom: 32px; font-size: .9rem; }
+.planner-step h2          { font-size: 1.375rem; font-weight: 800; margin-bottom: 6px; }   /* 22px */
+.planner-step .step-subtitle { color: var(--c-muted); margin-bottom: 24px; font-size: 0.875rem; line-height: 1.6; }
 
-/* People/Days sliders */
-.slider-group { margin-bottom: 28px; }
+/* Sliders — 8px grid */
+.slider-group { margin-bottom: 24px; }
 .slider-label { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-.slider-label span:first-child { font-weight: 700; font-size: .95rem; }
+.slider-label span:first-child { font-weight: 700; font-size: 0.9375rem; }
 .slider-value {
   background: var(--c-primary); color: #fff;
-  padding: 4px 14px; border-radius: 100px; font-size: .875rem; font-weight: 700;
+  min-height: 28px; padding: 0 14px; border-radius: 999px;
+  font-size: 0.8125rem; font-weight: 700; display: inline-flex; align-items: center;
 }
-input[type="range"] {
-  width: 100%; accent-color: var(--c-primary);
-  height: 6px; border-radius: 3px;
-}
+input[type="range"] { width: 100%; accent-color: var(--c-primary); height: 5px; border-radius: 3px; }
 
-/* Recommendation tabs */
+/* ── Recommendation tabs ── */
 .reco-tabs {
-  display: flex; gap: 6px; margin-bottom: 24px;
-  border-bottom: 2px solid var(--c-border); padding-bottom: 0;
+  display: flex; gap: 4px; margin-bottom: 20px;
+  border-bottom: 2px solid var(--c-border);
 }
 .reco-tab-btn {
-  padding: 10px 20px; font-size: .875rem; font-weight: 700;
+  min-height: 40px; padding: 0 18px;  /* matches btn height */
+  font-size: 0.875rem; font-weight: 700;
   color: var(--c-muted); cursor: pointer; background: none; border: none;
-  border-bottom: 3px solid transparent; margin-bottom: -2px;
+  border-bottom: 2px solid transparent; margin-bottom: -2px;
   transition: all .2s; font-family: var(--font);
 }
 .reco-tab-btn:hover { color: var(--c-primary); }
@@ -238,143 +319,228 @@ input[type="range"] {
 
 .reco-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 16px;
 }
 .reco-card {
   border-radius: 16px; padding: 20px; color: #fff; position: relative; overflow: hidden;
   display: flex; gap: 14px; align-items: flex-start;
+  cursor: pointer; border: 2.5px solid transparent;
   transition: transform .25s var(--ease), box-shadow .25s var(--ease);
 }
 .reco-card:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,.35); }
-.reco-icon { font-size: 2rem; flex-shrink: 0; margin-top: 2px; }
+.reco-icon { font-size: 1.75rem; flex-shrink: 0; margin-top: 2px; }     /* 28px */
 .reco-body { flex: 1; min-width: 0; }
-.reco-type  { font-size: .7rem; font-weight: 700; opacity: .75; margin-bottom: 3px; text-transform: uppercase; letter-spacing: .04em; }
-.reco-name  { font-size: .95rem; font-weight: 800; margin-bottom: 6px; line-height: 1.3; }
-.reco-desc  { font-size: .78rem; opacity: .8; line-height: 1.5; margin-bottom: 10px; }
-.reco-badges { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; }
+.reco-type  { font-size: 0.6875rem; font-weight: 700; opacity: .72; margin-bottom: 4px; text-transform: uppercase; letter-spacing: .05em; }
+.reco-name  { font-size: 0.9375rem; font-weight: 800; margin-bottom: 6px; line-height: 1.35; }  /* 15px */
+.reco-desc  { font-size: 0.8125rem; opacity: .82; line-height: 1.55; margin-bottom: 10px; }    /* 13px */
+.reco-badges { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 10px; }
 .reco-badges span {
-  font-size: .65rem; font-weight: 700; padding: 2px 8px;
-  background: rgba(255,255,255,.18); border-radius: 100px;
+  font-size: 0.6875rem; font-weight: 700; padding: 2px 8px;
+  background: rgba(255,255,255,.18); border-radius: 999px;
 }
-.reco-meta { display: flex; flex-direction: column; gap: 3px; font-size: .75rem; opacity: .85; margin-bottom: 8px; }
-.reco-price { font-weight: 800; font-size: .82rem; }
+.reco-meta { display: flex; flex-direction: column; gap: 3px; font-size: 0.8125rem; opacity: .85; margin-bottom: 10px; }
+.reco-price { font-weight: 800; font-size: 0.875rem; }
 .reco-contact {
-  display: inline-block; font-size: .75rem; font-weight: 700;
-  background: rgba(255,255,255,.2); padding: 4px 12px; border-radius: 100px;
-  color: #fff; text-decoration: none; margin-top: 4px;
+  display: inline-flex; align-items: center;
+  font-size: 0.8125rem; font-weight: 600;
+  background: rgba(255,255,255,.18); padding: 0 12px; min-height: 30px;
+  border-radius: 999px; color: #fff; text-decoration: none;
 }
-.reco-contact:hover { background: rgba(255,255,255,.35); color: #fff; }
+.reco-contact:hover { background: rgba(255,255,255,.32); color: #fff; }
 .reco-panel { }
 .reco-panel.hidden { display: none; }
 
-/* Summary / Cost */
-.summary-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-.summary-box {
-  border-radius: 18px; padding: 24px; color: #fff;
-}
-.summary-box.dark { background: linear-gradient(145deg,#0a1929,#1565c0); }
+/* ── Summary / Cost ── */
+/* 2-col grid, 24px gap, 16px border-radius */
+.summary-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.summary-box { border-radius: 16px; padding: 24px; color: #fff; }
+.summary-box.dark  { background: linear-gradient(145deg,#0a1929,#1565c0); }
 .summary-box.green { background: linear-gradient(145deg,#052210,#1b5e42); }
-.summary-box h3 { font-size: 1rem; font-weight: 800; margin-bottom: 16px; opacity: .85; }
+.summary-box h3    { font-size: 0.875rem; font-weight: 800; margin-bottom: 16px; opacity: .85; text-transform: uppercase; letter-spacing: .04em; }
 .summary-dest-item {
   display: flex; gap: 10px; align-items: center;
-  padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.1);
+  padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,.08);
 }
 .summary-dest-item:last-child { border-bottom: none; }
+
+/* Cost rows — 8px grid */
 .cost-row {
   display: flex; justify-content: space-between; align-items: center;
-  padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.12);
-  font-size: .83rem;
+  padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.1);
+  font-size: 0.8125rem; /* 13px */
 }
 .cost-row:last-child { border-bottom: none; }
 .cost-total {
   display: flex; justify-content: space-between; align-items: center;
-  padding: 14px 0 6px; font-size: 1.1rem; font-weight: 800;
-  border-top: 2px solid rgba(255,255,255,.3); margin-top: 8px;
+  padding: 12px 0 6px; font-size: 1.0625rem; font-weight: 800; /* 17px */
+  border-top: 2px solid rgba(255,255,255,.25); margin-top: 8px;
 }
-.cost-per-person {
-  text-align: center; font-size: .85rem; opacity: .8; padding-top: 6px;
-}
+.cost-per-person { text-align: center; font-size: 0.875rem; opacity: .75; padding-top: 6px; }
 
-/* Contact CTA */
+/* Contact CTA — standard padding: 40px vertical */
 .contact-cta-box {
   background: linear-gradient(145deg, #e65100, #f57c00);
-  border-radius: 20px; padding: 32px; text-align: center; color: #fff;
-  margin-top: 24px;
+  border-radius: 20px; padding: 40px 32px; text-align: center; color: #fff; margin-top: 24px;
 }
-.contact-cta-box h3 { font-size: 1.3rem; font-weight: 800; margin-bottom: 10px; }
-.contact-cta-box p { font-size: .9rem; opacity: .9; margin-bottom: 24px; line-height: 1.6; }
+.contact-cta-box h3 { font-size: 1.25rem; font-weight: 800; margin-bottom: 8px; }      /* 20px */
+.contact-cta-box p  { font-size: 0.9375rem; opacity: .88; margin-bottom: 24px; line-height: 1.65; } /* 15px */
 .contact-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+/* Zalo/Call buttons — height 48px (btn-lg standard) */
 .btn-zalo {
   display: inline-flex; align-items: center; gap: 8px;
-  background: #0068ff; color: #fff; padding: 13px 28px;
-  border-radius: 100px; font-weight: 800; font-size: .95rem;
+  background: #0068ff; color: #fff;
+  min-height: 48px; padding: 0 28px;
+  border-radius: 999px; font-weight: 700; font-size: 0.9375rem;
   text-decoration: none; transition: all .2s;
 }
 .btn-zalo:hover { background: #0052cc; color: #fff; transform: translateY(-2px); }
 .btn-call {
   display: inline-flex; align-items: center; gap: 8px;
-  background: rgba(255,255,255,.2); color: #fff; padding: 13px 28px;
-  border-radius: 100px; font-weight: 800; font-size: .95rem;
-  text-decoration: none; border: 2px solid rgba(255,255,255,.4);
-  transition: all .2s;
+  background: rgba(255,255,255,.18); color: #fff;
+  min-height: 48px; padding: 0 28px;
+  border-radius: 999px; font-weight: 700; font-size: 0.9375rem;
+  text-decoration: none; border: 1.5px solid rgba(255,255,255,.35); transition: all .2s;
 }
-.btn-call:hover { background: rgba(255,255,255,.35); color: #fff; }
-.phone-big { font-size: 1.6rem; font-weight: 900; letter-spacing: 1px; margin: 10px 0; }
+.btn-call:hover { background: rgba(255,255,255,.32); color: #fff; }
+.phone-big { font-size: 1.75rem; font-weight: 900; letter-spacing: 1.5px; margin: 12px 0; } /* 28px */
 
-/* ── Travel tips section ── */
+/* ── Travel tips ── */
 .tips-section { background: #fff; }
-.tips-grid-home { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+.tips-grid-home { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
 .tip-card-home {
-  border-radius: 16px; padding: 24px;
+  border-radius: 12px; padding: 20px 20px 20px 16px;
   border-left: 4px solid var(--c-primary);
   background: var(--c-bg); transition: all .2s;
 }
 .tip-card-home:hover { box-shadow: var(--sh); transform: translateY(-2px); }
-.tip-card-home h4 { font-size: .95rem; font-weight: 800; margin-bottom: 12px; }
+.tip-card-home h4 { font-size: 0.9375rem; font-weight: 700; margin-bottom: 12px; }  /* 15px */
 .tip-list-home { list-style: none; }
 .tip-list-home li {
   padding: 6px 0; border-bottom: 1px solid var(--c-border-2);
-  font-size: .8rem; color: var(--c-text-2); line-height: 1.5;
-  display: flex; gap: 8px;
+  font-size: 0.8125rem; color: var(--c-text-2); line-height: 1.55; display: flex; gap: 8px;
 }
 .tip-list-home li:last-child { border-bottom: none; }
 .tip-list-home li span { flex-shrink: 0; }
 
-/* Packing list */
-.packing-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+/* Packing list — items 40px tall (btn-md height) */
+.packing-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(156px, 1fr)); gap: 8px; }
 .pack-item {
   display: flex; align-items: center; gap: 8px;
-  padding: 10px 14px; background: var(--c-bg); border-radius: var(--r-sm);
-  font-size: .8rem; font-weight: 500; cursor: pointer;
-  transition: all .15s; user-select: none;
-  border: 1.5px solid var(--c-border);
+  min-height: 40px; padding: 0 12px;
+  background: var(--c-bg); border-radius: var(--r-sm);
+  font-size: 0.8125rem; font-weight: 500; cursor: pointer;
+  transition: all .15s; user-select: none; border: 1.5px solid var(--c-border);
 }
 .pack-item:hover { border-color: var(--c-primary); }
-.pack-item.checked {
-  background: var(--c-primary-faint); border-color: var(--c-primary);
-  color: var(--c-primary);
-}
-.pack-item .pack-icon { font-size: 1.1rem; }
+.pack-item.checked { background: var(--c-primary-faint); border-color: var(--c-primary); color: var(--c-primary); }
+.pack-item .pack-icon { font-size: 1rem; }
 .pack-item .pack-done { margin-left: auto; color: var(--c-primary); display: none; }
 .pack-item.checked .pack-done { display: block; }
 
-/* Floating contact button */
+/* ── Dev-notice popup ───────────────────────────────────────── */
+.devpop-overlay {
+  position: fixed; inset: 0; z-index: 1100;
+  background: rgba(0,0,0,.58); backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+  opacity: 0; pointer-events: none;
+  transition: opacity .4s ease;
+}
+.devpop-overlay.show { opacity: 1; pointer-events: all; }
+.devpop {
+  background: var(--c-surface);
+  border-radius: 24px;
+  width: 100%; max-width: 460px;
+  padding: 36px 32px 28px;
+  position: relative;
+  transform: translateY(28px) scale(.96);
+  transition: transform .48s cubic-bezier(.34,1.4,.64,1);
+  box-shadow: 0 24px 80px rgba(0,0,0,.45), 0 0 0 1px rgba(255,255,255,.05);
+}
+.devpop-overlay.show .devpop { transform: translateY(0) scale(1); }
+
+.devpop-close {
+  position: absolute; top: 14px; right: 14px;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--c-bg); border: none;
+  color: var(--c-muted); font-size: .825rem;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all .18s;
+}
+.devpop-close:hover { background: var(--c-primary-faint); color: var(--c-primary); }
+
+.devpop-icon {
+  width: 60px; height: 60px; border-radius: 18px;
+  background: linear-gradient(135deg, var(--c-primary), var(--c-primary-light));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.65rem; margin: 0 auto 18px;
+}
+.devpop h3 {
+  text-align: center; font-size: 1.2rem; font-weight: 800;
+  margin-bottom: 8px; color: var(--c-text);
+}
+.devpop-desc {
+  text-align: center; font-size: .875rem; color: var(--c-muted);
+  line-height: 1.72; margin-bottom: 22px;
+}
+
+/* Progress */
+.devpop-progress {
+  background: var(--c-bg); border-radius: 10px;
+  padding: 14px 16px; margin-bottom: 18px;
+}
+.devpop-progress-lbl {
+  display: flex; justify-content: space-between;
+  font-size: .72rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .05em; color: var(--c-text-2); margin-bottom: 8px;
+}
+.devpop-progress-track {
+  height: 8px; background: var(--c-border-2); border-radius: 4px; overflow: hidden;
+}
+.devpop-progress-fill {
+  height: 100%; border-radius: 4px; width: 0;
+  background: linear-gradient(90deg, var(--c-primary), var(--c-primary-light));
+  transition: width 1.3s cubic-bezier(.4,0,.2,1);
+}
+
+/* Feature list */
+.devpop-features {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 8px; margin-bottom: 22px;
+}
+.devpop-feat {
+  display: flex; align-items: center; gap: 7px;
+  font-size: .8rem; color: var(--c-text-2);
+}
+.devpop-feat-dot {
+  width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: .62rem;
+}
+.devpop-feat.done .devpop-feat-dot { background: var(--c-primary-faint); color: var(--c-primary); }
+.devpop-feat.wip  .devpop-feat-dot { background: rgba(245,166,35,.14); color: #d4820e; }
+
+.devpop-actions { display: flex; gap: 10px; }
+.devpop-actions .btn { flex: 1; justify-content: center; }
+
+/* Float contact — height 48px */
 .float-contact {
-  position: fixed; bottom: 80px; right: 16px; z-index: 999;
+  position: fixed; bottom: 24px; right: 20px; z-index: 999;
   background: linear-gradient(135deg, #0068ff, #004dd4);
-  color: #fff; border: none; border-radius: 100px;
-  padding: 13px 20px; display: flex; align-items: center; gap: 8px;
-  font-family: var(--font); font-size: .82rem; font-weight: 700;
-  cursor: pointer; box-shadow: 0 6px 24px rgba(0,104,255,.45);
-  text-decoration: none;
+  color: #fff; border: none; border-radius: 999px;
+  min-height: 48px; padding: 0 22px;
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--font); font-size: 0.875rem; font-weight: 700;
+  cursor: pointer; text-decoration: none;
+  box-shadow: 0 4px 20px rgba(0,104,255,.4);
   animation: pulseBtn 2.5s infinite;
 }
 @keyframes pulseBtn {
-  0%,100% { box-shadow: 0 6px 24px rgba(0,104,255,.45); }
-  50%      { box-shadow: 0 6px 36px rgba(0,104,255,.7); }
+  0%,100% { box-shadow: 0 4px 20px rgba(0,104,255,.4); }
+  50%      { box-shadow: 0 4px 32px rgba(0,104,255,.65); }
 }
-.float-contact:hover { background: linear-gradient(135deg,#0052cc,#003daa); color:#fff; transform:scale(1.04); }
+.float-contact:hover { background: linear-gradient(135deg,#0052cc,#003daa); color:#fff; transform:scale(1.03); }
 
 /* ── Reco sub-step progress ── */
 .rss-progress {
@@ -566,7 +732,7 @@ input[type="range"] {
 
 /* ── Toast ── */
 .app-toast {
-  position: fixed; bottom: 88px; left: 50%; transform: translateX(-50%) translateY(20px);
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
   z-index: 2000; min-width: 260px; max-width: 420px;
   background: #1a1a2e; color: #fff;
   padding: 14px 20px; border-radius: 12px;
@@ -813,107 +979,195 @@ input[type="range"] {
 .popup-plan-btn-active { color: var(--c-primary) !important; border-color: var(--c-primary) !important; }
 
 /* Responsive */
-/* Push content up above fixed smart bar */
-body { padding-bottom: 72px; }
 
-@media (max-width: 768px) {
+/* ── Responsive breakpoints ───────────────────────────────
+   MacBook 13.6": ~1280px  |  Tablet: 768-1024px  |  Mobile: <768px
+──────────────────────────────────────────────────────── */
+
+/* Large desktop (> 1440px): slight upscale */
+@media (min-width: 1440px) {
+  .hero-new h1 { font-size: clamp(2.6rem, 3.2vw, 3.8rem); }
+  .showcase-card { min-height: 200px; }
+}
+
+/* MacBook range (1024–1280px) */
+@media (max-width: 1280px) { }
+
+/* Tablet (768–1024px) */
+@media (max-width: 1024px) {
   .showcase-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-  .showcase-card { min-height: 160px; padding: 18px 14px; }
-  .sc-name  { font-size: .85rem; }
-  .hero-stats-row { gap: 20px; padding: 18px 20px; }
+  .showcase-card { min-height: 170px; padding: 20px 16px; }
+  .reco-grid { grid-template-columns: repeat(2, 1fr); }
   .summary-layout { grid-template-columns: 1fr; }
+}
+
+/* Tablet small / mobile large (768px) */
+@media (max-width: 768px) {
+  .hs-arrow { display: none; }
+  .hs-sub { display: none; }
+  .hs-ctas { flex-direction: column; align-items: center; }
+  .hs-ctas .btn { width: 100%; max-width: 300px; justify-content: center; }
+  .hs-stat { padding: 12px 16px; }
+  .hs-stat-n { font-size: 1.1rem; }
+
+  .showcase-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .showcase-card { min-height: 155px; padding: 16px 13px; }
+  .sc-icon { font-size: 1.6rem; margin-bottom: 6px; }
+  .sc-name { font-size: .82rem; }
+  .sc-tagline { display: none; }
+
   .reco-grid { grid-template-columns: 1fr; }
+  .summary-layout { grid-template-columns: 1fr; }
   .hero-ctas { flex-direction: column; align-items: center; }
-  /* Smart bar mobile */
-  .selection-bar { padding: 8px 14px 10px; }
-  .smart-pills { gap: 4px; }
-  .smart-pill { padding: 5px 9px; font-size: .66rem; }
-  .smart-sep { display: none; }
-  .smart-cta-btn { padding: 9px 16px; font-size: .8rem; }
-  /* Itinerary mobile */
-  .itin-item { padding: 12px 14px; }
-  .itin-drive { padding-left: 54px; }
-  /* Sub-step mobile */
-  .rss-progress { padding: 14px 16px; }
-  .rss-label { font-size: .65rem; }
-  .rss-footer { flex-wrap: wrap; }
-  .rss-footer .btn { flex: 1; min-width: 0; }
-  /* Popup mobile */
+
+  /* Tips grid */
+  .tips-grid-home { grid-template-columns: 1fr; }
+  .packing-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* Sub-step */
+  .rss-progress { padding: 12px 14px; }
+  .rss-label { font-size: .62rem; }
+  .rss-footer { flex-wrap: wrap; gap: 8px; }
+  .rss-footer .btn { flex: 1; min-width: 120px; justify-content: center; }
+
+  /* Popup */
   .dest-popup-overlay { padding: 0; align-items: flex-end; }
   .dest-popup { max-height: 92vh; border-radius: 20px 20px 0 0; }
-  .popup-body { padding: 20px 18px 28px; }
-  .popup-header { gap: 12px; }
-  .popup-icon { width: 48px; height: 48px; font-size: 1.4rem; }
-  .popup-title { font-size: 1.15rem; }
+  .popup-body { padding: 18px 16px 24px; }
+  .popup-header { gap: 10px; }
+  .popup-icon { width: 44px; height: 44px; font-size: 1.3rem; }
+  .popup-title { font-size: 1.05rem; }
   .popup-info-grid { grid-template-columns: 1fr 1fr; }
   .popup-cta { flex-direction: column; }
   .popup-cta .btn { flex: none; width: 100%; }
 }
+
+/* Mobile small (< 480px) */
 @media (max-width: 480px) {
-  .showcase-grid { grid-template-columns: 1fr; }
-  .packing-grid { grid-template-columns: repeat(2, 1fr); }
+  .hs-badge { font-size: .72rem; padding: 5px 14px; }
+  .hs-stats { width: 100%; max-width: 340px; margin: 0 auto; }
+  .hs-stat { flex: 1 1 45%; border-bottom: 1px solid rgba(255,255,255,.08); }
+  .hs-stat:nth-child(2) { border-right: none; }
+  .hs-stat:last-child, .hs-stat:nth-last-child(2):nth-child(odd) { border-bottom: none; }
+
+  .showcase-grid { grid-template-columns: 1fr; gap: 10px; }
+  .showcase-card { min-height: 140px; padding: 16px 14px; flex-direction: row; align-items: flex-end; gap: 12px; }
+  .sc-icon { font-size: 2rem; margin-bottom: 0; }
+  .sc-tagline { display: none; }
+
   .popup-info-grid { grid-template-columns: 1fr; }
-  .smart-pill:nth-child(n+4) { display: none; }
+  .packing-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* Summary */
+  .summary-box { padding: 18px 16px; }
+  .cost-total { font-size: .95rem; }
 }
   </style>
 </head>
 <body class="page-normal">
 
-<!-- ── NAVBAR ── -->
-<nav class="navbar" id="navbar">
-  <a href="index.html" class="navbar-brand">
-    <div class="navbar-logo">🗺️</div>
-    <div class="navbar-name">Explore<span>Quảng Trị</span></div>
-  </a>
-  <div class="navbar-nav" id="navMenu">
-    <a href="index.html"        class="nav-link active">🏠 Trang Chủ</a>
-    <a href="#planner-section"  class="nav-link" onclick="document.getElementById('planner-section').scrollIntoView({behavior:'smooth'});return false;">✨ Lập Kế Hoạch</a>
-    <a href="destinations.html" class="nav-link">📍 Địa Điểm</a>
-    <a href="itinerary.html"    class="nav-link">📅 Lộ Trình</a>
-    <a href="services.html"     class="nav-link">🛎️ Dịch Vụ</a>
-    <a href="#tips-section"     class="nav-link" onclick="document.getElementById('tips-section').scrollIntoView({behavior:'smooth'});return false;">💡 Lưu ý & Chuẩn bị</a>
-  </div>
-  <a href="https://zalo.me/0337788044" target="_blank" class="btn btn-accent btn-sm navbar-cta">
-    <i class="fas fa-headset"></i> Tư vấn miễn phí
-  </a>
-  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
-    <span></span><span></span><span></span>
-  </div>
-</nav>
 
-<!-- ── HERO ── -->
-<section class="hero-new">
-  <div class="hero-eyebrow">🌿 Quảng Trị · Miền Trung Việt Nam</div>
-  <h1>Vùng Đất <em>Huyền Thoại</em><br>Chờ Bạn Khám Phá</h1>
-  <p class="hero-subtitle">
-    Từ di tích chiến tranh hào hùng, hang động kỳ vĩ đến bãi biển tinh khôi —
-    chúng tôi giúp bạn lên kế hoạch chuyến đi hoàn hảo và kết nối với người hỗ trợ thực sự.
-  </p>
-  <div class="hero-ctas">
-    <a href="#showcase-section" class="btn btn-ghost btn-lg">
-      <i class="fas fa-map-marker-alt"></i> Xem địa điểm nổi bật
-    </a>
-    <a href="#planner-section" class="btn btn-accent btn-lg">
-      <i class="fas fa-magic"></i> Lập kế hoạch ngay
-    </a>
+<!-- ══ HERO SLIDESHOW ══════════════════════════════════════════ -->
+<section class="hs" id="heroSection">
+
+  <!-- ── Background slides ──────────────────────────────────
+       Để dùng ảnh thực: thêm style="background-image:url('images/...')"
+       vào từng .hs-bg, gradient sẽ tự đóng vai trò fallback.
+       ─────────────────────────────────────────────────────── -->
+  <div class="hs-track" id="hsTrack">
+    <div class="hs-slide active"
+         data-loc="🏛️ Thành Cổ Quảng Trị"
+         data-tag="Thánh địa 81 ngày đêm bi hùng, còn mãi với thời gian">
+      <div class="hs-bg hs-bg-1"></div>
+    </div>
+    <div class="hs-slide"
+         data-loc="🏖️ Bãi Biển Cửa Tùng"
+         data-tag="Bờ biển trong xanh như ngọc — vẻ đẹp nguyên sơ miền Trung">
+      <div class="hs-bg hs-bg-2"></div>
+    </div>
+    <div class="hs-slide"
+         data-loc="🕳️ Địa Đạo Vịnh Mốc"
+         data-tag="Kỳ công ngầm sâu 20m — nơi cả làng sống sót qua bom đạn">
+      <div class="hs-bg hs-bg-3"></div>
+    </div>
+    <div class="hs-slide"
+         data-loc="🌊 Bãi Biển Cửa Việt"
+         data-tag="Thiên đường nắng vàng trải dài — nghỉ dưỡng chuẩn resort">
+      <div class="hs-bg hs-bg-4"></div>
+    </div>
+    <div class="hs-slide"
+         data-loc="🌿 Rừng Nguyên Sinh Khe Sanh"
+         data-tag="Đại ngàn bất tận — thiên nhiên hoang sơ đang chờ bạn">
+      <div class="hs-bg hs-bg-5"></div>
+    </div>
   </div>
-  <div class="hero-stats-row">
-    <div class="hstat"><div class="hstat-num">12</div><div class="hstat-lbl">Điểm nổi bật</div></div>
-    <div class="hstat"><div class="hstat-num">7+</div><div class="hstat-lbl">Lựa chọn lưu trú</div></div>
-    <div class="hstat"><div class="hstat-num">100%</div><div class="hstat-lbl">Tư vấn miễn phí</div></div>
-    <div class="hstat"><div class="hstat-num">0337<br>788044</div><div class="hstat-lbl">Hotline Zalo/Call</div></div>
+
+  <!-- Overlay + film grain -->
+  <div class="hs-overlay" aria-hidden="true"></div>
+  <div class="hs-grain"   aria-hidden="true"></div>
+
+  <!-- ── Main content ── -->
+  <div class="hs-content">
+    <div class="hs-badge" id="hsBadge">🏛️ Thành Cổ Quảng Trị</div>
+
+    <h1 class="hs-title">Vùng Đất <em>Huyền Thoại</em><br>Chờ Bạn Khám Phá</h1>
+
+    <p class="hs-tagline" id="hsTagline">Thánh địa 81 ngày đêm bi hùng, còn mãi với thời gian</p>
+
+    <p class="hs-sub">
+      Từ di tích chiến tranh hào hùng, hang động kỳ vĩ đến bãi biển tinh khôi —<br>
+      chúng tôi giúp bạn lên kế hoạch chuyến đi hoàn hảo.
+    </p>
+
+    <div class="hs-ctas">
+      <a href="#showcase-section" class="btn btn-ghost btn-lg">
+        <i class="fas fa-compass"></i> Khám phá địa điểm
+      </a>
+      <a href="#planner-section" class="btn btn-accent btn-lg">
+        <i class="fas fa-magic"></i> Lập kế hoạch ngay
+      </a>
+    </div>
+
+    <div class="hs-stats">
+      <div class="hs-stat">
+        <span class="hs-stat-n" data-to="12">0</span>
+        <span class="hs-stat-l">Địa điểm nổi bật</span>
+      </div>
+      <div class="hs-stat">
+        <span class="hs-stat-n" data-to="7">0</span>
+        <span class="hs-stat-l">Lựa chọn lưu trú</span>
+      </div>
+      <div class="hs-stat">
+        <span class="hs-stat-n">100%</span>
+        <span class="hs-stat-l">Tư vấn miễn phí</span>
+      </div>
+      <div class="hs-stat">
+        <span class="hs-stat-n" style="font-size:.95rem;letter-spacing:.02em">0337 788044</span>
+        <span class="hs-stat-l">Hotline Zalo/Call</span>
+      </div>
+    </div>
   </div>
-  <div class="hero-scroll-hint" onclick="document.getElementById('showcase-section').scrollIntoView({behavior:'smooth'})" style="cursor:pointer;">
-    <span>Cuộn xuống</span><i class="fas fa-chevron-down"></i>
-  </div>
+
+  <!-- ── Navigation ── -->
+  <button class="hs-arrow hs-prev" onclick="hsNav(-1)" aria-label="Slide trước">
+    <i class="fas fa-chevron-left"></i>
+  </button>
+  <button class="hs-arrow hs-next" onclick="hsNav(1)" aria-label="Slide tiếp">
+    <i class="fas fa-chevron-right"></i>
+  </button>
+  <div class="hs-dots" id="hsDots"></div>
+
+  <!-- Progress bar -->
+  <div class="hs-bar-wrap"><div class="hs-bar" id="hsBar"></div></div>
+
 </section>
 
 <!-- ══════════════════════════════════════════════════════════
      SHOWCASE SECTION
 ══════════════════════════════════════════════════════════ -->
-<section id="showcase-section" style="background:var(--c-bg);padding:80px 0 40px;">
+<section id="showcase-section" style="background:var(--c-bg);padding:56px 0 32px;">
   <div class="container">
-    <div style="margin-bottom:48px;">
+    <div style="margin-bottom:32px;">
       <div class="section-eyebrow">📍 Điểm đến nổi bật</div>
       <h2 class="section-head">Chọn điểm bạn muốn tham quan</h2>
       <p class="section-lead">
@@ -923,7 +1177,7 @@ body { padding-bottom: 72px; }
     </div>
 
     <!-- Vùng Nam – Di tích & Biển -->
-    <div style="margin-bottom:48px;">
+    <div style="margin-bottom:32px;">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
         <div style="width:4px;height:32px;background:var(--c-primary);border-radius:2px;"></div>
         <div>
@@ -935,7 +1189,7 @@ body { padding-bottom: 72px; }
     </div>
 
     <!-- Vùng Bắc – Hang động & Thiên nhiên -->
-    <div style="margin-bottom:40px;">
+    <div style="margin-bottom:24px;">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
         <div style="width:4px;height:32px;background:#0d47a1;border-radius:2px;"></div>
         <div>
@@ -957,40 +1211,21 @@ body { padding-bottom: 72px; }
 </section>
 
 <!-- ── Selection sticky bar ── -->
-<div class="selection-bar" id="selectionBar">
-  <div class="smart-pills">
-    <div class="smart-pill" id="pill-dests">
-      <span class="pill-dot"></span>
-      <span id="selectionCount">Chọn điểm</span>
-    </div>
-    <span class="smart-sep">›</span>
-    <div class="smart-pill" id="pill-trip">
-      <span class="pill-dot"></span>
-      <span id="pill-trip-text">Hành trình</span>
-    </div>
-    <span class="smart-sep">›</span>
-    <div class="smart-pill" id="pill-services">
-      <span class="pill-dot"></span>
-      <span id="pill-services-text">Dịch vụ</span>
-    </div>
-  </div>
-  <button class="smart-cta-btn" id="startPlannerBtn" disabled onclick="smartBarAction()">
-    <span id="smartBtnText">Lên kế hoạch</span>
-    <i class="fas fa-arrow-right"></i>
-  </button>
-</div>
 
 
 <!-- ══════════════════════════════════════════════════════════
      TRIP PLANNER
 ══════════════════════════════════════════════════════════ -->
-<section id="planner-section" class="planner-section" style="padding:80px 0;">
+<section id="planner-section" class="planner-section" style="padding:60px 0;">
   <div class="container" style="max-width:960px;">
 
-    <div style="margin-bottom:40px;text-align:center;">
+    <div style="margin-bottom:28px;text-align:center;">
       <div class="section-eyebrow">✨ Trip Planner</div>
       <h2 class="section-head">Lập Kế Hoạch Chuyến Đi</h2>
-      <p class="section-lead" style="margin:0 auto;">Cho chúng tôi biết thêm để đề xuất khách sạn, phương tiện và nhà hàng phù hợp nhất.</p>
+      <p class="section-lead" style="margin:0 auto 24px;">Cho chúng tôi biết thêm để đề xuất khách sạn, phương tiện và nhà hàng phù hợp nhất.</p>
+      <button class="btn btn-primary btn-lg" id="mainPlanBtn" onclick="proceedStep1()">
+        <i class="fas fa-magic"></i> <span id="mainPlanBtnText">Lên kế hoạch ngay</span>
+      </button>
     </div>
 
     <!-- Step progress -->
@@ -1212,16 +1447,16 @@ body { padding-bottom: 72px; }
 <!-- ══════════════════════════════════════════════════════════
      TRAVEL TIPS & PACKING LIST
 ══════════════════════════════════════════════════════════ -->
-<section id="tips-section" class="tips-section" style="padding:80px 0;">
+<section id="tips-section" class="tips-section" style="padding:60px 0;">
   <div class="container">
-    <div style="margin-bottom:48px;">
+    <div style="margin-bottom:32px;">
       <div class="section-eyebrow">💡 Lưu ý & Chuẩn bị</div>
       <h2 class="section-head">Trước Khi Lên Đường</h2>
       <p class="section-lead">Những điều quan trọng bạn cần biết và chuẩn bị cho chuyến đi hoàn hảo.</p>
     </div>
 
     <!-- Tips cards -->
-    <div class="tips-grid-home" style="margin-bottom:48px;">
+    <div class="tips-grid-home" style="margin-bottom:36px;">
       <div class="tip-card-home">
         <h4>🌤️ Thời điểm lý tưởng</h4>
         <ul class="tip-list-home">
@@ -1418,14 +1653,6 @@ body { padding-bottom: 72px; }
 <script src="js/data.js"></script>
 <script src="js/planner.js"></script>
 <script>
-// ── Navbar scroll ──────────────────────────────────────────
-window.addEventListener('scroll', () => {
-  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 30);
-});
-function toggleMenu() {
-  document.getElementById('navMenu').classList.toggle('open');
-}
-
 // ── Packing list ───────────────────────────────────────────
 const PACKING = [
   { icon:'👟', label:'Giày đế bằng' },
@@ -1475,6 +1702,16 @@ function renderStep1List() {
   const badge  = document.getElementById('s1-count-badge');
   if (!listEl) return;
 
+  // Update main plan button text
+  const mainBtn = document.getElementById('mainPlanBtnText');
+  if (mainBtn) {
+    mainBtn.textContent = dests.length > 0
+      ? `Lên kế hoạch với ${dests.length} điểm`
+      : 'Lên kế hoạch ngay';
+  }
+  const planBtn = document.getElementById('mainPlanBtn');
+  if (planBtn) planBtn.className = dests.length > 0 ? 'btn btn-primary btn-lg' : 'btn btn-outline btn-lg';
+
   if (badge) badge.textContent = dests.length > 0
     ? `${dests.length} điểm đã chọn`
     : '';
@@ -1509,10 +1746,6 @@ function removeDestSelection(id) {
 function proceedStep1() {
   if (plannerState.selectedDests.size === 0) {
     showToast('⚠️ Vui lòng chọn ít nhất 1 địa điểm trước khi lên kế hoạch');
-    const bar = document.getElementById('selectionBar');
-    bar.classList.remove('shake'); void bar.offsetWidth;
-    bar.classList.add('shake');
-    setTimeout(() => bar.classList.remove('shake'), 500);
     document.getElementById('showcase-section')?.scrollIntoView({ behavior: 'smooth' });
     return;
   }
@@ -1560,9 +1793,6 @@ function showStep(n) {
     if (parseInt(i) === n) ind.classList.add('active');
   });
   document.getElementById('planner-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  const bar = document.getElementById('selectionBar');
-  if (bar) bar.classList.add('visible');
-  if (typeof updateSmartBar === 'function') updateSmartBar();
 }
 
 // Init
@@ -1574,11 +1804,175 @@ document.addEventListener('DOMContentLoaded', () => {
 // Keyboard: Escape = close popup, arrows = gallery nav
 document.addEventListener('keydown', e => {
   const overlay = document.getElementById('dest-popup-overlay');
-  if (!overlay.classList.contains('active')) return;
-  if (e.key === 'Escape')      closeDestPopup();
-  if (e.key === 'ArrowRight')  nextImage();
-  if (e.key === 'ArrowLeft')   prevImage();
+  if (overlay.classList.contains('active')) {
+    if (e.key === 'Escape')      closeDestPopup();
+    if (e.key === 'ArrowRight')  nextImage();
+    if (e.key === 'ArrowLeft')   prevImage();
+    return;
+  }
+  if (e.key === 'ArrowLeft')  hsNav(-1);
+  if (e.key === 'ArrowRight') hsNav(1);
 });
+</script>
+
+<!-- ══ DEV NOTICE POPUP ══════════════════════════════════════ -->
+<div id="devPopOverlay" class="devpop-overlay"
+     onclick="if(event.target===this)closeDevPop()">
+  <div class="devpop" role="dialog" aria-modal="true" aria-labelledby="devPopTitle">
+
+    <button class="devpop-close" onclick="closeDevPop()" aria-label="Đóng">
+      <i class="fas fa-times"></i>
+    </button>
+
+    <div class="devpop-icon">🔨</div>
+    <h3 id="devPopTitle">Website Đang Phát Triển</h3>
+    <p class="devpop-desc">
+      Explore Quảng Trị đang được hoàn thiện thêm tính năng và nội dung mỗi ngày.
+      Một số phần có thể chưa đầy đủ — cảm ơn bạn đã thông cảm và ủng hộ!
+    </p>
+
+    <div class="devpop-progress">
+      <div class="devpop-progress-lbl">
+        <span>Tiến độ phát triển</span>
+        <span>75%</span>
+      </div>
+      <div class="devpop-progress-track">
+        <div class="devpop-progress-fill" id="devPopBar" data-w="75"></div>
+      </div>
+    </div>
+
+    <div class="devpop-features">
+      <div class="devpop-feat done"><span class="devpop-feat-dot">✓</span> Trang chủ &amp; Hero</div>
+      <div class="devpop-feat done"><span class="devpop-feat-dot">✓</span> Địa điểm du lịch</div>
+      <div class="devpop-feat done"><span class="devpop-feat-dot">✓</span> Lập kế hoạch</div>
+      <div class="devpop-feat done"><span class="devpop-feat-dot">✓</span> Blog &amp; Review</div>
+      <div class="devpop-feat done"><span class="devpop-feat-dot">✓</span> Dịch vụ &amp; Liên hệ</div>
+      <div class="devpop-feat wip" ><span class="devpop-feat-dot">⏳</span> Đặt tour trực tuyến</div>
+    </div>
+
+    <div class="devpop-actions">
+      <button class="btn btn-outline" onclick="closeDevPop()">
+        <i class="fas fa-check"></i> Đã hiểu
+      </button>
+      <a href="https://zalo.me/0337788044" target="_blank" rel="noopener"
+         class="btn btn-primary" onclick="closeDevPop()">
+        <i class="fas fa-comment-dots"></i> Góp ý qua Zalo
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── DEV NOTICE LOGIC ── -->
+<script>
+(function () {
+  const KEY = 'qt_devnotice_v1';
+  if (localStorage.getItem(KEY)) return;          /* already seen — bail */
+
+  const overlay = document.getElementById('devPopOverlay');
+  if (!overlay) return;
+
+  /* Show after 5 s */
+  setTimeout(function () {
+    overlay.classList.add('show');
+    /* Animate the progress fill on next frame */
+    var bar = document.getElementById('devPopBar');
+    if (bar) requestAnimationFrame(function () { bar.style.width = bar.dataset.w + '%'; });
+    /* Mark seen immediately so page reload won't show again */
+    localStorage.setItem(KEY, '1');
+  }, 5000);
+
+  window.closeDevPop = function () {
+    overlay.classList.remove('show');
+  };
+
+  /* ESC closes it */
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') window.closeDevPop();
+  });
+})();
+</script>
+
+<!-- ── HERO SLIDESHOW ── -->
+<script>
+(function () {
+  const slides   = [...document.querySelectorAll('.hs-slide')];
+  const dotsWrap = document.getElementById('hsDots');
+  const badgeEl  = document.getElementById('hsBadge');
+  const tagEl    = document.getElementById('hsTagline');
+  const barEl    = document.getElementById('hsBar');
+  const DELAY    = 5800;
+  let cur = 0, timer;
+
+  /* Build dot buttons */
+  slides.forEach((_, i) => {
+    const d = document.createElement('button');
+    d.className = 'hs-dot' + (i === 0 ? ' active' : '');
+    d.setAttribute('aria-label', 'Slide ' + (i + 1));
+    d.onclick = () => goTo(i);
+    dotsWrap.appendChild(d);
+  });
+
+  function goTo(next) {
+    if (next === cur) return;
+    slides[cur].classList.remove('active');
+    dotsWrap.children[cur].classList.remove('active');
+    cur = ((next % slides.length) + slides.length) % slides.length;
+    slides[cur].classList.add('active');
+    dotsWrap.children[cur].classList.add('active');
+
+    /* Fade out badge + tagline, update, fade back in */
+    [badgeEl, tagEl].forEach(el => el.classList.add('hs-fade'));
+    const s = slides[cur];
+    setTimeout(() => {
+      badgeEl.textContent = s.dataset.loc;
+      tagEl.textContent   = s.dataset.tag;
+      [badgeEl, tagEl].forEach(el => el.classList.remove('hs-fade'));
+    }, 320);
+
+    startBar();
+  }
+
+  window.hsNav = dir => goTo(cur + dir);
+
+  function startBar() {
+    clearInterval(timer);
+    barEl.style.transition = 'none';
+    barEl.style.width = '0';
+    void barEl.offsetWidth;
+    barEl.style.transition = 'width ' + DELAY + 'ms linear';
+    barEl.style.width = '100%';
+    timer = setInterval(() => goTo(cur + 1), DELAY);
+  }
+
+  /* Counter animation for stats */
+  const io = new IntersectionObserver(entries => {
+    if (!entries[0].isIntersecting) return;
+    document.querySelectorAll('.hs-stat-n[data-to]').forEach(el => {
+      const target = +el.dataset.to;
+      let n = 0;
+      const iv = setInterval(() => {
+        n = Math.min(n + Math.ceil(target / 28), target);
+        el.textContent = n;
+        if (n >= target) clearInterval(iv);
+      }, 45);
+    });
+    io.disconnect();
+  }, { threshold: 0.6 });
+  const statsEl = document.querySelector('.hs-stats');
+  if (statsEl) io.observe(statsEl);
+
+  /* Touch swipe */
+  let tx = 0;
+  const hero = document.getElementById('heroSection');
+  hero.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+  hero.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 55) goTo(cur + (dx < 0 ? 1 : -1));
+  }, { passive: true });
+
+  startBar();
+})();
 </script>
 </body>
 </html>

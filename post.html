@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="pageTitle">Bài Viết | Explore Quảng Trị</title>
+  <meta name="description" id="pageDesc" content="Đọc bài viết chi tiết về du lịch Quảng Trị tại Explore Quảng Trị.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/navbar.js" defer></script>
+  <style>
+/* ════════════════════════════════════════════════════════
+   POST PAGE — blog article detail
+   ════════════════════════════════════════════════════════ */
+
+/* ── Hero ── */
+.post-hero {
+  position: relative; height: 520px; overflow: hidden;
+  background: #0d1b0a;
+}
+.post-hero-img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: brightness(.55);
+  transition: transform 8s ease-out;
+}
+.post-hero:hover .post-hero-img { transform: scale(1.04); }
+.post-hero-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,.85) 0%, rgba(0,0,0,.3) 55%, transparent 100%);
+  display: flex; align-items: flex-end;
+}
+.post-hero-body {
+  max-width: 860px; margin: 0 auto; width: 100%;
+  padding: 0 clamp(20px,5vw,48px) 44px;
+}
+.post-type-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--c-primary); color: #fff;
+  padding: 4px 14px; border-radius: 100px;
+  font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
+  margin-bottom: 16px;
+}
+.post-hero-title {
+  font-size: clamp(1.625rem, 3.5vw, 2.75rem);
+  font-weight: 900; color: #fff; line-height: 1.2; margin-bottom: 18px;
+  text-shadow: 0 2px 20px rgba(0,0,0,.4);
+}
+.post-hero-meta {
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  color: rgba(255,255,255,.8); font-size: .82rem;
+}
+.post-hero-meta .av {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--c-primary), var(--c-primary-light));
+  display: flex; align-items: center; justify-content: center;
+  font-size: .72rem; font-weight: 800; color: #fff; flex-shrink: 0;
+}
+.post-hero-meta .meta-sep { opacity: .4; }
+.post-hero-meta .meta-stars { color: #f5c842; letter-spacing: 1px; font-size: .8rem; }
+
+/* ── Breadcrumb ── */
+.post-breadcrumb {
+  background: var(--c-bg); border-bottom: 1px solid var(--c-border);
+  padding: 12px 0;
+}
+.post-breadcrumb-inner {
+  max-width: 1140px; margin: 0 auto; padding: 0 clamp(20px,5vw,48px);
+  display: flex; align-items: center; gap: 8px;
+  font-size: .8rem; color: var(--c-muted);
+}
+.post-breadcrumb-inner a { color: var(--c-primary); font-weight: 600; }
+.post-breadcrumb-inner a:hover { text-decoration: underline; }
+.post-breadcrumb-inner i { font-size: .65rem; opacity: .55; }
+
+/* ── Layout ── */
+.post-layout {
+  max-width: 1140px; margin: 0 auto;
+  padding: 48px clamp(20px,5vw,48px) 80px;
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 48px;
+  align-items: start;
+}
+
+/* ── Article ── */
+.post-article { min-width: 0; }
+
+/* Lead paragraph */
+.post-lead {
+  font-size: 1.125rem; color: var(--c-text);
+  line-height: 1.82; margin-bottom: 32px;
+  font-weight: 400;
+  border-left: 4px solid var(--c-primary);
+  padding-left: 20px;
+}
+
+/* Body typography */
+.post-body { color: var(--c-text-2); font-size: 1rem; line-height: 1.85; }
+.post-body p { margin-bottom: 20px; }
+.post-body h2 {
+  font-size: 1.375rem; font-weight: 800; color: var(--c-text);
+  margin: 40px 0 16px; padding-top: 8px;
+  border-top: 2px solid var(--c-border);
+}
+.post-body h3 {
+  font-size: 1.1rem; font-weight: 700; color: var(--c-text);
+  margin: 28px 0 12px;
+}
+.post-body ul { padding-left: 22px; margin-bottom: 20px; }
+.post-body li { margin-bottom: 8px; }
+.post-body strong { color: var(--c-text); font-weight: 700; }
+.post-body em { font-style: italic; color: var(--c-text); }
+
+/* Pull quote */
+.post-quote {
+  margin: 32px 0; padding: 24px 28px;
+  background: var(--c-primary-faint); border-left: 5px solid var(--c-primary);
+  border-radius: 0 12px 12px 0;
+}
+.post-quote p {
+  font-size: 1.0625rem; font-style: italic; font-weight: 600;
+  color: var(--c-primary-dark); margin: 0; line-height: 1.7;
+}
+
+/* Info box */
+.post-infobox {
+  margin: 32px 0; background: var(--c-surface);
+  border: 1.5px solid var(--c-border); border-radius: 16px;
+  overflow: hidden;
+}
+.post-infobox-head {
+  background: var(--c-primary); color: #fff;
+  padding: 12px 20px; font-weight: 700; font-size: .875rem;
+  display: flex; align-items: center; gap: 8px;
+}
+.post-infobox-body { padding: 16px 20px; }
+.post-infobox-row {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 8px 0; border-bottom: 1px solid var(--c-border-2);
+  font-size: .875rem;
+}
+.post-infobox-row:last-child { border-bottom: none; }
+.post-infobox-row .pir-label {
+  color: var(--c-muted); font-weight: 600; min-width: 120px; flex-shrink: 0;
+}
+.post-infobox-row .pir-val { color: var(--c-text); }
+
+/* Tip box */
+.post-tip {
+  margin: 28px 0; padding: 18px 20px;
+  background: rgba(245,166,35,.08); border: 1.5px solid rgba(245,166,35,.25);
+  border-radius: 12px; display: flex; gap: 14px;
+}
+.post-tip-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 2px; }
+.post-tip-body { font-size: .875rem; line-height: 1.7; color: var(--c-text-2); }
+.post-tip-body strong { color: var(--c-text); }
+
+/* Rating */
+.post-rating {
+  margin: 40px 0 32px; padding: 24px;
+  background: var(--c-surface); border: 1.5px solid var(--c-border);
+  border-radius: 16px;
+}
+.post-rating-head {
+  display: flex; align-items: center; gap: 16px; margin-bottom: 20px;
+}
+.post-rating-score {
+  font-size: 2.5rem; font-weight: 900; color: var(--c-primary); line-height: 1;
+}
+.post-rating-stars { color: #f5c842; font-size: 1.25rem; letter-spacing: 2px; }
+.post-rating-count { font-size: .8rem; color: var(--c-muted); margin-top: 4px; }
+.post-rating-breakdown { display: flex; flex-direction: column; gap: 10px; }
+.prb-row { display: flex; align-items: center; gap: 12px; font-size: .82rem; }
+.prb-label { color: var(--c-muted); min-width: 120px; }
+.prb-track {
+  flex: 1; height: 6px; background: var(--c-border-2); border-radius: 3px; overflow: hidden;
+}
+.prb-fill { height: 100%; background: var(--c-primary); border-radius: 3px; }
+.prb-val { font-weight: 700; color: var(--c-text); min-width: 28px; text-align: right; }
+
+/* Tags */
+.post-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 36px; }
+.post-tag {
+  padding: 5px 14px; border-radius: 100px;
+  background: var(--c-bg); border: 1.5px solid var(--c-border);
+  font-size: .78rem; font-weight: 600; color: var(--c-muted);
+}
+.post-tag:hover { border-color: var(--c-primary); color: var(--c-primary); cursor: pointer; }
+
+/* Author card */
+.post-author {
+  margin: 40px 0; padding: 24px;
+  background: var(--c-surface); border: 1.5px solid var(--c-border);
+  border-radius: 16px; display: flex; gap: 20px; align-items: flex-start;
+}
+.post-author-av {
+  width: 60px; height: 60px; border-radius: 50%; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--c-primary), var(--c-primary-light));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.25rem; font-weight: 900; color: #fff;
+}
+.post-author-name { font-size: 1rem; font-weight: 800; margin-bottom: 4px; }
+.post-author-bio { font-size: .85rem; color: var(--c-muted); line-height: 1.6; }
+.post-author-posts { font-size: .78rem; color: var(--c-primary); font-weight: 600; margin-top: 6px; }
+
+/* Nav buttons */
+.post-nav {
+  display: flex; justify-content: space-between; gap: 12px;
+  margin: 40px 0; flex-wrap: wrap;
+}
+.post-nav .btn { gap: 8px; }
+
+/* ── Sidebar ── */
+.post-sidebar { position: sticky; top: 84px; }
+
+.post-toc {
+  background: var(--c-surface); border: 1.5px solid var(--c-border);
+  border-radius: 16px; padding: 20px; margin-bottom: 20px;
+}
+.post-toc-title {
+  font-size: .75rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .06em; color: var(--c-muted); margin-bottom: 12px;
+}
+.post-toc-list { list-style: none; }
+.post-toc-list li { margin-bottom: 2px; }
+.post-toc-list a {
+  display: block; padding: 6px 10px;
+  font-size: .82rem; color: var(--c-text-2);
+  border-radius: 8px; border-left: 3px solid transparent;
+  transition: all .18s; line-height: 1.45;
+}
+.post-toc-list a:hover { color: var(--c-primary); background: var(--c-primary-faint); border-left-color: var(--c-primary); }
+.post-toc-list a.active { color: var(--c-primary); background: var(--c-primary-faint); border-left-color: var(--c-primary); font-weight: 600; }
+
+/* Share widget */
+.post-share {
+  background: var(--c-surface); border: 1.5px solid var(--c-border);
+  border-radius: 16px; padding: 18px 20px; margin-bottom: 20px;
+}
+.post-share-title {
+  font-size: .75rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .06em; color: var(--c-muted); margin-bottom: 12px;
+}
+.post-share-btns { display: flex; flex-direction: column; gap: 8px; }
+.post-share-btn {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 14px; border-radius: 10px; border: 1.5px solid var(--c-border);
+  font-size: .82rem; font-weight: 600; cursor: pointer;
+  background: var(--c-bg); color: var(--c-text-2);
+  transition: all .18s; text-decoration: none;
+}
+.post-share-btn:hover { border-color: var(--c-primary); color: var(--c-primary); background: var(--c-primary-faint); }
+.post-share-btn i { width: 16px; text-align: center; }
+
+/* Destination card in sidebar */
+.post-dest-card {
+  background: var(--c-surface); border: 1.5px solid var(--c-border);
+  border-radius: 16px; overflow: hidden;
+}
+.post-dest-card-bg {
+  height: 100px;
+  background: linear-gradient(135deg, var(--c-primary-dark), var(--c-primary));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.5rem;
+}
+.post-dest-card-body { padding: 16px; }
+.post-dest-card-name { font-weight: 800; font-size: .95rem; margin-bottom: 4px; }
+.post-dest-card-addr { font-size: .78rem; color: var(--c-muted); margin-bottom: 12px; }
+
+/* ── Related posts ── */
+.post-related { background: var(--c-bg); padding: 56px 0; margin-top: 48px; }
+.post-related-inner { max-width: 1140px; margin: 0 auto; padding: 0 clamp(20px,5vw,48px); }
+.post-related-head {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 28px;
+}
+.post-related-head h2 { font-size: 1.25rem; font-weight: 800; }
+.post-related-grid {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 20px;
+}
+.pr-card {
+  background: var(--c-surface); border-radius: 16px; overflow: hidden;
+  border: 1.5px solid var(--c-border);
+  display: flex; flex-direction: column;
+  transition: transform .22s, box-shadow .22s, border-color .2s;
+  cursor: pointer; text-decoration: none; color: inherit;
+}
+.pr-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,.1); border-color: var(--c-primary); }
+.pr-card-img { height: 160px; overflow: hidden; background: var(--c-primary-dark); position: relative; }
+.pr-card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+.pr-card:hover .pr-card-img img { transform: scale(1.06); }
+.pr-card-body { padding: 16px; flex: 1; display: flex; flex-direction: column; }
+.pr-card-type {
+  font-size: .68rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .05em; color: var(--c-primary); margin-bottom: 6px;
+}
+.pr-card-title { font-size: .9rem; font-weight: 700; line-height: 1.45; margin-bottom: 8px; }
+.pr-card-meta { font-size: .75rem; color: var(--c-muted); margin-top: auto; }
+
+/* ── 404 state ── */
+.post-not-found {
+  max-width: 560px; margin: 80px auto; text-align: center; padding: 0 24px;
+}
+.post-not-found .pnf-icon { font-size: 4rem; margin-bottom: 16px; }
+.post-not-found h2 { margin-bottom: 10px; }
+.post-not-found p { color: var(--c-muted); margin-bottom: 28px; }
+
+/* ── Responsive ── */
+@media (max-width: 960px) {
+  .post-layout { grid-template-columns: 1fr; gap: 32px; }
+  .post-sidebar { position: static; }
+  .post-toc { display: none; }
+  .post-related-grid { grid-template-columns: repeat(2,1fr); }
+  .post-hero { height: 380px; }
+}
+@media (max-width: 560px) {
+  .post-hero { height: 300px; }
+  .post-hero-title { font-size: 1.5rem; }
+  .post-related-grid { grid-template-columns: 1fr; }
+  .post-author { flex-direction: column; }
+  .post-nav { flex-direction: column; }
+  .post-nav .btn { justify-content: center; }
+}
+  </style>
+</head>
+<body class="page-normal">
+
+<!-- ── HERO ── -->
+<div class="post-hero" id="postHero">
+  <img id="postHeroImg" class="post-hero-img" src="" alt="">
+  <div class="post-hero-overlay">
+    <div class="post-hero-body">
+      <div class="post-type-badge" id="postTypeBadge"></div>
+      <h1 class="post-hero-title" id="postHeroTitle"></h1>
+      <div class="post-hero-meta" id="postHeroMeta"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── BREADCRUMB ── -->
+<div class="post-breadcrumb">
+  <div class="post-breadcrumb-inner">
+    <a href="index.html"><i class="fas fa-home"></i></a>
+    <i class="fas fa-chevron-right"></i>
+    <a href="blog.html">Blog & Review</a>
+    <i class="fas fa-chevron-right"></i>
+    <span id="bcType"></span>
+  </div>
+</div>
+
+<!-- ── ARTICLE LAYOUT ── -->
+<div class="post-layout" id="postLayout">
+
+  <!-- ── MAIN ARTICLE ── -->
+  <article class="post-article" id="postArticle">
+    <!-- content injected by JS -->
+  </article>
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="post-sidebar" id="postSidebar">
+
+    <!-- TOC -->
+    <div class="post-toc" id="postToc">
+      <div class="post-toc-title"><i class="fas fa-list-ul" style="margin-right:6px;"></i>Mục lục</div>
+      <ul class="post-toc-list" id="tocList"></ul>
+    </div>
+
+    <!-- Share -->
+    <div class="post-share">
+      <div class="post-share-title"><i class="fas fa-share-alt" style="margin-right:6px;"></i>Chia sẻ bài viết</div>
+      <div class="post-share-btns">
+        <a id="shareZalo" href="#" target="_blank" class="post-share-btn">
+          <i class="fas fa-comment-dots" style="color:#0068ff;"></i> Chia sẻ qua Zalo
+        </a>
+        <button class="post-share-btn" onclick="copyLink()">
+          <i class="fas fa-link"></i> Sao chép liên kết
+        </button>
+      </div>
+    </div>
+
+    <!-- Destination card -->
+    <div class="post-dest-card" id="postDestCard" style="display:none;">
+      <div class="post-dest-card-bg" id="destCardIcon"></div>
+      <div class="post-dest-card-body">
+        <div class="post-dest-card-name" id="destCardName"></div>
+        <div class="post-dest-card-addr" id="destCardAddr"></div>
+        <a href="destinations.html" class="btn btn-primary btn-sm" style="width:100%;justify-content:center;">
+          <i class="fas fa-map-marker-alt"></i> Xem địa điểm
+        </a>
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+<!-- ── RELATED POSTS ── -->
+<div class="post-related" id="postRelated">
+  <div class="post-related-inner">
+    <div class="post-related-head">
+      <div style="width:4px;height:28px;background:var(--c-primary);border-radius:2px;"></div>
+      <h2>Bài viết liên quan</h2>
+    </div>
+    <div class="post-related-grid" id="relatedGrid"></div>
+  </div>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer style="background:var(--c-text);color:rgba(255,255,255,.7);text-align:center;padding:28px;font-size:.82rem;">
+  <div>© 2025 Explore Quảng Trị ·
+    <a href="index.html" style="color:rgba(255,255,255,.7);">Trang chủ</a> ·
+    <a href="blog.html"  style="color:rgba(255,255,255,.7);">Blog</a>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script>
+/* ═══════════════════════════════════════════════════════════
+   BLOG POST DATA — same as blog.html + full article bodies
+   ═══════════════════════════════════════════════════════════ */
+const POSTS = [
+  {
+    id: 1, type: 'review', featured: true,
+    title: 'Thành Cổ Quảng Trị — Nơi Lịch Sử Còn Thổn Thức',
+    excerpt: 'Tôi đến Thành Cổ vào một buổi sáng tháng 7. Không khí tĩnh lặng đến kỳ lạ. Hàng cây xanh mát bao quanh bức tường thành cũ kỹ, hoa sen nở rộ trên hồ... Chỉ 30 phút ngồi yên trong đó, tôi hiểu vì sao người ta gọi đây là "vùng đất thiêng".',
+    dest: 'Thành Cổ Quảng Trị', destAddr: 'Thị xã Quảng Trị, Quảng Trị', destIcon: '🏛️',
+    author: 'Minh Tuấn', authorInitial: 'MT',
+    authorBio: 'Nhiếp ảnh gia du lịch, đã đi qua 48 tỉnh thành Việt Nam. Đặc biệt yêu thích miền Trung — nơi lịch sử và thiên nhiên hòa quyện theo cách không nơi nào có được.',
+    authorPosts: '12 bài viết',
+    date: '15/05/2025', readTime: '7 phút', rating: 5,
+    img: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1200&q=80',
+    tags: ['lịch sử', 'tâm linh', 'quảng trị', 'di tích', 'chiến tranh'],
+    ratingBreakdown: [
+      { label: 'Tầm quan trọng lịch sử', val: 5.0 },
+      { label: 'Không gian & cảnh quan',  val: 4.8 },
+      { label: 'Hướng dẫn & thuyết minh', val: 4.5 },
+      { label: 'Dịch vụ & tiện ích',      val: 4.0 },
+    ],
+    body: `
+      <p class="post-lead">Tôi đến lúc 7 giờ sáng, khi sương còn chưa tan hẳn. Người lái xe ôm địa phương bảo: <em>"Đến sớm đi cậu ơi, trước 9 giờ mới cảm nhận được hồn của nó."</em> Tôi nghe lời. Và đó là quyết định đúng nhất trong suốt chuyến đi Quảng Trị lần này.</p>
+
+      <div class="post-body">
+
+        <h2 id="s1">Không gian như đứng yên với thời gian</h2>
+        <p>Thành Cổ Quảng Trị nằm ngay trung tâm thị xã, cách Đà Nẵng khoảng 150km về phía Bắc. Từ ngoài nhìn vào, bức tường thành bằng gạch cũ nâu đỏ cao chừng 4–5 mét bao quanh một khuôn viên rộng lớn. Hào nước bên ngoài đã xanh rì bèo dại. Hoa súng nở tím hồng.</p>
+        <p>Nhưng khi bước qua cổng thành phía Đông, không khí thay đổi hoàn toàn.</p>
+        <p>Tiếng xe máy ngoài đường phố biến mất. Chỉ còn tiếng gió và tiếng chim. Cây cỏ xanh mướt trải dài trên nền đất mà 52 năm trước đã thấm đẫm máu xương của hơn 10.000 chiến sĩ.</p>
+
+        <div class="post-quote">
+          <p>"Đứng trước tấm bia ghi tên liệt sĩ, tôi không đọc hết được. Chữ nhỏ dày đặc trải trên đá hoa cương. Tuổi các anh... 18, 19, 20, 21..."</p>
+        </div>
+
+        <h2 id="s2">81 ngày đêm bi hùng nhất lịch sử</h2>
+        <p>Mùa hè năm 1972, trận chiến bảo vệ Thành Cổ Quảng Trị kéo dài đúng <strong>81 ngày đêm</strong> — từ ngày 28/6 đến 16/9/1972. Đây là một trong những trận chiến khốc liệt nhất trong cuộc kháng chiến chống Mỹ cứu nước.</p>
+        <p>Lực lượng bảo vệ chỉ có khoảng vài nghìn người, phải đối mặt với hỏa lực khổng lồ: mỗi ngày, đối phương ném xuống trung bình <strong>500 tấn bom đạn</strong> — gấp 7 lần lượng bom ném xuống Nhật Bản tính trên cùng một đơn vị diện tích trong Thế chiến II.</p>
+        <p>Chiến sĩ ta gọi Thành Cổ là <em>"cối xay thịt"</em>. Nhưng họ không rút lui.</p>
+
+        <div class="post-tip">
+          <div class="post-tip-icon">📖</div>
+          <div class="post-tip-body">
+            <strong>Nên đọc trước:</strong> Cuốn <em>"Mùa Hè Đỏ Lửa"</em> của nhà văn Phan Nhật Nam sẽ giúp bạn hiểu sâu hơn về bối cảnh lịch sử trước khi tham quan. Cảm nhận khi đứng tại Thành Cổ sau khi đọc xong sẽ khác hoàn toàn.
+          </div>
+        </div>
+
+        <h2 id="s3">Kiến trúc Nguyễn triều còn lại</h2>
+        <p>Thành Cổ được xây dựng năm 1809, dưới triều vua Gia Long. Mặt bằng hình vuông mỗi cạnh khoảng 420m, tường thành cao 4m, dày hơn 12m. Xung quanh có hào sâu với bốn cổng thành theo bốn hướng.</p>
+        <p>Trận chiến 1972 đã phá hủy hầu hết kiến trúc bên trong. Ngày nay, khuôn viên được bảo tồn như một công viên tưởng niệm. Đài tưởng niệm trung tâm được thiết kế hình <strong>nén nhang khổng lồ</strong> — ý niệm tâm linh của người Việt.</p>
+        <p>Hồ sen rộng bao quanh đài tưởng niệm. Bên dưới hồ là lớp tro cốt và di vật chiến tranh được thu gom qua nhiều thập kỷ. Vì vậy người dân địa phương gọi đây là <em>"nghĩa trang không bia mộ"</em> — nơi yên nghỉ của những chiến sĩ chưa tìm được danh tính.</p>
+
+        <h2 id="s4">Những chi tiết khiến tôi không quên được</h2>
+        <ul>
+          <li><strong>Cây đa cổ thụ trước cổng thành Đông:</strong> Hơn 200 năm tuổi, gốc rễ bao trùm một góc tường thành. Trẻ con địa phương vẫn chạy nhảy xung quanh mỗi buổi sáng — một hình ảnh đối lập kỳ lạ giữa quá khứ và hiện tại.</li>
+          <li><strong>Tấm phù điêu trên tường thành:</strong> Những bức phù điêu khắc họa cảnh chiến đấu, bom rơi, chiến sĩ ngã xuống. Nghệ thuật giản dị nhưng đau đến tận xương.</li>
+          <li><strong>Giờ tưởng niệm buổi sáng:</strong> 6h30 hàng ngày, nhân viên khu tưởng niệm đánh trống tưởng niệm. Nếu có mặt, bạn sẽ thấy nhiều cụ già đứng lặng với đôi mắt đỏ hoe.</li>
+          <li><strong>Mùi hương trầm lan thoảng:</strong> Khói nhang từ các bàn thờ nhỏ rải rác trong khuôn viên. Người dân địa phương thường ghé vào buổi sáng để thắp hương cho những người đã nằm xuống ở đây.</li>
+        </ul>
+
+        <div class="post-infobox">
+          <div class="post-infobox-head">
+            <i class="fas fa-info-circle"></i> Thông tin tham quan
+          </div>
+          <div class="post-infobox-body">
+            <div class="post-infobox-row">
+              <span class="pir-label"><i class="fas fa-clock" style="margin-right:6px;"></i>Giờ mở cửa</span>
+              <span class="pir-val">06:00 – 18:00 (tất cả các ngày)</span>
+            </div>
+            <div class="post-infobox-row">
+              <span class="pir-label"><i class="fas fa-ticket-alt" style="margin-right:6px;"></i>Vé vào cửa</span>
+              <span class="pir-val"><strong>Miễn phí</strong></span>
+            </div>
+            <div class="post-infobox-row">
+              <span class="pir-label"><i class="fas fa-map-marker-alt" style="margin-right:6px;"></i>Địa chỉ</span>
+              <span class="pir-val">Thị xã Quảng Trị, tỉnh Quảng Trị</span>
+            </div>
+            <div class="post-infobox-row">
+              <span class="pir-label"><i class="fas fa-car" style="margin-right:6px;"></i>Cách Đông Hà</span>
+              <span class="pir-val">~14km về phía Nam, ~20 phút đi xe</span>
+            </div>
+            <div class="post-infobox-row">
+              <span class="pir-label"><i class="fas fa-stopwatch" style="margin-right:6px;"></i>Thời gian</span>
+              <span class="pir-val">1–2 giờ (nên dành cả buổi sáng)</span>
+            </div>
+            <div class="post-infobox-row">
+              <span class="pir-label"><i class="fas fa-phone" style="margin-right:6px;"></i>Liên hệ</span>
+              <span class="pir-val">0233 3852 797</span>
+            </div>
+          </div>
+        </div>
+
+        <h2 id="s5">Lời khuyên thực tế</h2>
+        <p>Sau khi tham quan, tôi rút ra vài kinh nghiệm muốn chia sẻ:</p>
+        <ul>
+          <li><strong>Đến sớm:</strong> Trước 8h sáng hoặc sau 4h chiều. Giờ trưa nắng gắt và đông khách.</li>
+          <li><strong>Thuê hướng dẫn viên địa phương:</strong> Nhóm HDV tại cổng thành (100–150k/người). Nghe họ kể chuyện sẽ khác hoàn toàn với đọc biển thông tin.</li>
+          <li><strong>Trang phục:</strong> Kín đáo, lịch sự. Đây là nơi tưởng niệm thiêng liêng — không mặc quần đùi, áo hở vai.</li>
+          <li><strong>Kết hợp lộ trình:</strong> Cách Cầu Hiền Lương 45km, Địa đạo Vịnh Mốc 30km. Bạn có thể ghé cả ba trong một ngày bằng xe máy thuê.</li>
+        </ul>
+
+        <div class="post-tip">
+          <div class="post-tip-icon">💡</div>
+          <div class="post-tip-body">
+            <strong>Mẹo chụp ảnh:</strong> Góc chụp đẹp nhất là từ bờ hào nhìn vào đài tưởng niệm lúc sáng sớm khi nắng còn dịu. Ánh sáng vàng chiếu qua tán cây cho ra những tấm ảnh cực kỳ atmospheric.
+          </div>
+        </div>
+
+      </div>`,
+  },
+  {
+    id: 2, type: 'review',
+    title: 'Địa đạo Vịnh Mốc: Đi để hiểu sức mạnh con người Việt',
+    excerpt: 'Chui vào đường hầm tối tăm ẩm ướt, tôi cảm nhận được cái lạnh buốt và bóng tối dày đặc. Hướng dẫn viên kể về 17 đứa trẻ được sinh ra ở đây — tôi không kiềm được xúc động.',
+    dest: 'Địa đạo Vịnh Mốc', destAddr: 'Vĩnh Linh, Quảng Trị', destIcon: '🕳️',
+    author: 'Lan Anh', authorInitial: 'LA',
+    authorBio: 'Giáo viên lịch sử, đam mê khám phá các địa điểm lịch sử Việt Nam.',
+    date: '02/05/2025', readTime: '4 phút', rating: 5,
+    img: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1200&q=80',
+    tags: ['địa đạo', 'chiến tranh', 'lịch sử'],
+  },
+  {
+    id: 3, type: 'food',
+    title: 'Bún bò Đông Hà — Tô bún thay đổi định nghĩa "ngon" của tôi',
+    excerpt: 'Sáng sớm 6h30, quán đã đông nghẹt. Tô bún màu đỏ sẫm, nước dùng sánh đậm mùi sả gừng... Sau 10 năm ăn bún bò Huế, tôi mới biết Quảng Trị có phong cách riêng ngon không kém.',
+    dest: 'Đông Hà', destAddr: 'TP. Đông Hà, Quảng Trị', destIcon: '🍜',
+    author: 'Hải Đăng', authorInitial: 'HĐ',
+    authorBio: 'Food blogger, review ẩm thực 3 miền.',
+    date: '28/04/2025', readTime: '3 phút', rating: 5,
+    img: 'https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=1200&q=80',
+    tags: ['ẩm thực', 'bún bò', 'đông hà'],
+  },
+  {
+    id: 4, type: 'review',
+    title: 'Hang Sơn Đoòng: Giá 3000 USD có xứng đáng không?',
+    excerpt: 'Câu trả lời ngắn: CÓ. Đây là trải nghiệm duy nhất trong đời tôi mà tôi không tìm được từ nào để mô tả. Khi đứng dưới "mây trong lòng đất" nhìn lên lỗ thủng trần hang — tôi khóc.',
+    dest: 'Hang Sơn Đoòng', destAddr: 'Quảng Bình', destIcon: '🌌',
+    author: 'Thu Hương', authorInitial: 'TH',
+    authorBio: 'Travel blogger chuyên về adventure travel.',
+    date: '20/04/2025', readTime: '8 phút', rating: 5,
+    img: 'https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?w=1200&q=80',
+    tags: ['sơn đoòng', 'hang động', 'quảng bình'],
+  },
+  {
+    id: 5, type: 'stay',
+    title: 'Phong Nha Farmstay — Nơi lưu trú đẹp nhất tôi từng ở',
+    excerpt: 'Bungalow gỗ nhìn ra sông Son. Buổi sáng tiếng chim hót, chiều tắm sông, tối ngồi bar uống bia nhìn núi. 3 ngày ở đây tôi quên mất mình đang "đi du lịch".',
+    dest: 'Phong Nha Farmstay', destAddr: 'Quảng Bình', destIcon: '🏡',
+    author: 'Bảo Trân', authorInitial: 'BT',
+    authorBio: 'Kỹ sư phần mềm, đam mê ecotravel.',
+    date: '12/04/2025', readTime: '5 phút', rating: 5,
+    img: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1200&q=80',
+    tags: ['lưu trú', 'ecolodge', 'phong nha'],
+  },
+  {
+    id: 6, type: 'tip',
+    title: '7 điều phải biết trước khi đến Quảng Trị lần đầu',
+    excerpt: 'Sau 4 chuyến đi trong 2 năm, tôi rút ra được những kinh nghiệm xương máu: thời điểm đến, cách di chuyển, đừng bỏ qua điều gì...',
+    dest: 'Quảng Trị', destAddr: 'Toàn tỉnh Quảng Trị', destIcon: '🗺️',
+    author: 'Quốc Hưng', authorInitial: 'QH',
+    authorBio: 'Nhiếp ảnh gia, đã đến Quảng Trị 4 lần.',
+    date: '05/04/2025', readTime: '6 phút', rating: null,
+    img: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80',
+    tags: ['mẹo', 'kinh nghiệm', 'lần đầu'],
+  },
+  {
+    id: 7, type: 'blog',
+    title: 'Một mình xuyên Quảng Trị — Hành trình 5 ngày solo',
+    excerpt: 'Tôi một mình, một balo, một chiếc xe máy thuê 150k/ngày. 5 ngày 4 đêm qua 12 địa điểm từ Thành Cổ đến Phong Nha. Đây là câu chuyện của tôi.',
+    dest: 'Toàn tỉnh', destAddr: 'Quảng Trị', destIcon: '🏍️',
+    author: 'Việt Dũng', authorInitial: 'VD',
+    authorBio: 'Solo traveler, đã đi xe máy xuyên Đông Nam Á.',
+    date: '30/03/2025', readTime: '10 phút', rating: null,
+    img: 'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=1200&q=80',
+    tags: ['solo travel', 'xe máy', 'hành trình'],
+  },
+  {
+    id: 8, type: 'review',
+    title: 'Biển Cửa Tùng buổi sáng — Đẹp hơn mọi bức ảnh',
+    excerpt: 'Tôi đến lúc 5h45 sáng. Bầu trời còn chưa sáng hẳn. Cát hồng nhạt, sóng êm, tuyệt không một bóng người. Đó là 45 phút yên bình nhất tôi từng có.',
+    dest: 'Biển Cửa Tùng', destAddr: 'Vĩnh Linh, Quảng Trị', destIcon: '🏖️',
+    author: 'Ngọc Mai', authorInitial: 'NM',
+    authorBio: 'Yêu thiên nhiên và nhiếp ảnh phong cảnh.',
+    date: '22/03/2025', readTime: '3 phút', rating: 5,
+    img: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=80',
+    tags: ['biển', 'cửa tùng', 'bình minh'],
+  },
+  {
+    id: 9, type: 'food',
+    title: 'Hải sản Cửa Việt — Tươi ngon theo đúng nghĩa đen',
+    excerpt: 'Con tôm vừa ra khỏi lồng là đã lên bàn. Cua ghẹ giá rẻ bằng 1/3 Hà Nội. Ăn xong mà tay còn dính mùi biển thơm phức — đó mới là hải sản thật sự.',
+    dest: 'Cửa Việt', destAddr: 'Triệu Phong, Quảng Trị', destIcon: '🦐',
+    author: 'Thanh Bình', authorInitial: 'TB',
+    authorBio: 'Đầu bếp tự do, khám phá ẩm thực ven biển miền Trung.',
+    date: '15/03/2025', readTime: '4 phút', rating: 5,
+    img: 'https://images.unsplash.com/photo-1533777857889-4be7c70b33f7?w=1200&q=80',
+    tags: ['hải sản', 'cửa việt', 'ẩm thực'],
+  },
+];
+
+const TYPE_LABELS = {
+  review: '⭐ Review địa điểm',
+  food:   '🍜 Ẩm thực',
+  stay:   '🏨 Lưu trú',
+  blog:   '📖 Câu chuyện du lịch',
+  tip:    '💡 Mẹo & Kinh nghiệm',
+};
+
+/* ─────────────────────────────────────────────────────────── */
+
+const params = new URLSearchParams(location.search);
+const postId = parseInt(params.get('id')) || 1;
+const post   = POSTS.find(p => p.id === postId);
+
+function renderStars(n) {
+  return n ? '★'.repeat(n) + '☆'.repeat(5 - n) : '';
+}
+
+/* ── 404 state ── */
+if (!post) {
+  document.getElementById('postHero').style.display    = 'none';
+  document.getElementById('postSidebar').style.display = 'none';
+  document.getElementById('postRelated').style.display = 'none';
+  document.getElementById('postArticle').innerHTML = `
+    <div class="post-not-found">
+      <div class="pnf-icon">😕</div>
+      <h2>Không tìm thấy bài viết</h2>
+      <p>Bài viết này không tồn tại hoặc đã bị xóa.</p>
+      <a href="blog.html" class="btn btn-primary"><i class="fas fa-arrow-left"></i> Quay lại Blog</a>
+    </div>`;
+} else {
+
+  /* ── Page meta ── */
+  document.getElementById('pageTitle').textContent = post.title + ' | Explore Quảng Trị';
+  document.getElementById('pageDesc').setAttribute('content', post.excerpt);
+
+  /* ── Hero ── */
+  const heroImg = document.getElementById('postHeroImg');
+  heroImg.src = post.img; heroImg.alt = post.title;
+
+  document.getElementById('postTypeBadge').textContent = TYPE_LABELS[post.type] || post.type;
+  document.getElementById('postHeroTitle').textContent = post.title;
+  document.getElementById('bcType').textContent = TYPE_LABELS[post.type] || post.type;
+
+  document.getElementById('postHeroMeta').innerHTML = `
+    <div class="av">${post.authorInitial}</div>
+    <span><strong>${post.author}</strong></span>
+    <span class="meta-sep">·</span>
+    <span><i class="fas fa-calendar-alt" style="margin-right:4px;opacity:.6;"></i>${post.date}</span>
+    <span class="meta-sep">·</span>
+    <span><i class="fas fa-book-open" style="margin-right:4px;opacity:.6;"></i>${post.readTime} đọc</span>
+    ${post.rating ? `<span class="meta-sep">·</span><span class="meta-stars">${renderStars(post.rating)}</span>` : ''}`;
+
+  /* ── Article ── */
+  const article = document.getElementById('postArticle');
+
+  if (post.body) {
+    /* Full article */
+    article.innerHTML = `
+      ${post.body}
+
+      ${post.ratingBreakdown ? buildRating(post) : ''}
+
+      <div class="post-tags">${post.tags.map(t => `<span class="post-tag">#${t}</span>`).join('')}</div>
+
+      <div class="post-author">
+        <div class="post-author-av">${post.authorInitial}</div>
+        <div>
+          <div class="post-author-name">${post.author}</div>
+          <div class="post-author-bio">${post.authorBio}</div>
+          <div class="post-author-posts"><i class="fas fa-pen" style="margin-right:5px;"></i>${post.authorPosts}</div>
+        </div>
+      </div>
+
+      <div class="post-nav">
+        <a href="blog.html" class="btn btn-outline">
+          <i class="fas fa-arrow-left"></i> Quay lại Blog
+        </a>
+        <a href="destinations.html" class="btn btn-primary">
+          <i class="fas fa-map-marker-alt"></i> Xem địa điểm liên quan
+        </a>
+      </div>`;
+  } else {
+    /* Excerpt only (content coming soon) */
+    article.innerHTML = `
+      <p class="post-lead">${post.excerpt}</p>
+      <div class="post-body">
+        <div class="post-tip" style="margin:48px 0;">
+          <div class="post-tip-icon">🔨</div>
+          <div class="post-tip-body">
+            <strong>Nội dung đang được cập nhật!</strong><br>
+            Bài viết này đang được hoàn thiện. Hãy quay lại sau hoặc liên hệ để được tư vấn trực tiếp về ${post.dest}.
+          </div>
+        </div>
+      </div>
+      <div class="post-tags">${post.tags.map(t => `<span class="post-tag">#${t}</span>`).join('')}</div>
+      <div class="post-author">
+        <div class="post-author-av">${post.authorInitial}</div>
+        <div>
+          <div class="post-author-name">${post.author}</div>
+          <div class="post-author-bio">${post.authorBio}</div>
+        </div>
+      </div>
+      <div class="post-nav">
+        <a href="blog.html" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Quay lại Blog</a>
+        <a href="https://zalo.me/0337788044" target="_blank" class="btn btn-primary">
+          <i class="fas fa-comment-dots"></i> Tư vấn qua Zalo
+        </a>
+      </div>`;
+  }
+
+  /* ── Destination card ── */
+  if (post.dest) {
+    const card = document.getElementById('postDestCard');
+    card.style.display = 'block';
+    document.getElementById('destCardIcon').textContent = post.destIcon || '📍';
+    document.getElementById('destCardName').textContent = post.dest;
+    document.getElementById('destCardAddr').textContent = post.destAddr || '';
+  }
+
+  /* ── Share ── */
+  const shareUrl = encodeURIComponent(location.href);
+  const shareText = encodeURIComponent(post.title + ' — Explore Quảng Trị');
+  document.getElementById('shareZalo').href = `https://zalo.me/share?url=${shareUrl}&title=${shareText}`;
+
+  /* ── TOC from h2 inside article ── */
+  setTimeout(() => {
+    const headings = article.querySelectorAll('h2[id]');
+    const tocList  = document.getElementById('tocList');
+    headings.forEach(h => {
+      const li  = document.createElement('li');
+      const a   = document.createElement('a');
+      a.href    = '#' + h.id;
+      a.textContent = h.textContent;
+      a.onclick = e => {
+        e.preventDefault();
+        h.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      };
+      li.appendChild(a); tocList.appendChild(li);
+    });
+
+    /* Highlight active TOC item on scroll */
+    if (headings.length) {
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          const link = tocList.querySelector(`a[href="#${entry.target.id}"]`);
+          if (link) link.classList.toggle('active', entry.isIntersecting);
+        });
+      }, { rootMargin: '-80px 0px -60% 0px' });
+      headings.forEach(h => io.observe(h));
+    }
+
+    /* Hide TOC if no headings */
+    if (!headings.length) document.getElementById('postToc').style.display = 'none';
+  }, 100);
+
+  /* ── Related posts ── */
+  const related = POSTS
+    .filter(p => p.id !== post.id && (p.type === post.type || p.tags?.some(t => post.tags?.includes(t))))
+    .slice(0, 3);
+
+  const grid = document.getElementById('relatedGrid');
+  if (related.length) {
+    grid.innerHTML = related.map(p => `
+      <a class="pr-card" href="post.html?id=${p.id}">
+        <div class="pr-card-img">
+          <img src="${p.img}" alt="${p.title}" loading="lazy">
+        </div>
+        <div class="pr-card-body">
+          <div class="pr-card-type">${TYPE_LABELS[p.type] || p.type}</div>
+          <div class="pr-card-title">${p.title}</div>
+          <div class="pr-card-meta">
+            ${p.author} · ${p.date} · ${p.readTime}
+          </div>
+        </div>
+      </a>`).join('');
+  } else {
+    document.getElementById('postRelated').style.display = 'none';
+  }
+}
+
+/* ── Rating breakdown builder ── */
+function buildRating(p) {
+  const score = p.rating || 5;
+  return `
+    <div class="post-rating">
+      <div class="post-rating-head">
+        <div class="post-rating-score">${score}.0</div>
+        <div>
+          <div class="post-rating-stars">${'★'.repeat(score)}</div>
+          <div class="post-rating-count">Đánh giá của tác giả</div>
+        </div>
+      </div>
+      <div class="post-rating-breakdown">
+        ${p.ratingBreakdown.map(r => `
+          <div class="prb-row">
+            <span class="prb-label">${r.label}</span>
+            <div class="prb-track">
+              <div class="prb-fill" style="width:${r.val * 20}%"></div>
+            </div>
+            <span class="prb-val">${r.val}</span>
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+
+/* ── Copy link ── */
+function copyLink() {
+  navigator.clipboard.writeText(location.href).then(() => {
+    const btn = document.querySelector('.post-share-btn:last-child');
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-check" style="color:var(--c-primary);"></i> Đã sao chép!';
+    setTimeout(() => btn.innerHTML = orig, 2000);
+  });
+}
+</script>
+</body>
+</html>

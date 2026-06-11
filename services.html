@@ -7,6 +7,7 @@
   <meta name="description" content="Thông tin liên hệ khách sạn, nhà hàng, thuê xe, hướng dẫn viên và công ty tour tại Quảng Trị.">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
+  <script src="js/navbar.js" defer></script>
   <style>
     .page-hero { background: linear-gradient(135deg, #2c3e50, #34495e); padding: 100px 0 60px; text-align: center; color: #fff; }
     .page-hero h1 { color: #fff; margin-bottom: 12px; }
@@ -26,24 +27,6 @@
   </style>
 </head>
 <body class="page-normal">
-
-<nav class="navbar" id="navbar">
-  <a href="index.html" class="navbar-brand">
-    <div class="navbar-logo">🗺️</div>
-    <div class="navbar-name">Explore<span>Quảng Trị</span></div>
-  </a>
-  <div class="navbar-nav" id="navMenu">
-    <a href="index.html"             class="nav-link">🏠 Trang Chủ</a>
-    <a href="destinations.html"      class="nav-link">📍 Địa Điểm</a>
-    <a href="itinerary.html"         class="nav-link">📅 Lộ Trình</a>
-    <a href="services.html"          class="nav-link active">🛎️ Dịch Vụ</a>
-    <a href="index.html#tips-section" class="nav-link">💡 Lưu ý & Chuẩn bị</a>
-  </div>
-  <a href="index.html#planner-section" class="btn btn-accent btn-sm navbar-cta">
-    <i class="fas fa-magic"></i> Lập kế hoạch
-  </a>
-  <div class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
-</nav>
 
 <div class="page-hero">
   <div class="container">
@@ -176,9 +159,6 @@
 
 <script src="js/data.js"></script>
 <script>
-  window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY>10));
-  function toggleMenu() { document.getElementById('navMenu').classList.toggle('open'); }
-
   function renderStars(r) { return '<span class="rating-stars">' + '★'.repeat(Math.floor(r||0)) + '</span>'; }
 
   function renderStays() {
