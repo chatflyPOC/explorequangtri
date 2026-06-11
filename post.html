@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5FL6FF42');</script>
+<!-- End Google Tag Manager -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title id="pageTitle">Bài Viết | Explore Quảng Trị</title>
@@ -321,8 +328,58 @@
   .post-nav .btn { justify-content: center; }
 }
   </style>
+  <!-- ═══ SEO TAGS ════════════════════════════════════════════ -->
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+  <meta name="author" content="Explore Quảng Trị">
+  <meta name="geo.region" content="VN-QT">
+  <meta name="geo.placename" content="Quảng Trị, Việt Nam">
+  <meta name="language" content="vi">
+  <meta name="revisit-after" content="7 days">
+  <meta name="keywords" content="review du lịch Quảng Trị, kinh nghiệm tham quan, blog du lịch Quảng Trị, Thành Cổ Quảng Trị, Địa đạo Vịnh Mốc, biển Cửa Tùng, ẩm thực Quảng Trị">
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Explore Quảng Trị">
+  <meta property="og:locale" content="vi_VN">
+  <meta property="og:url" content="https://khamphaquangtri.vn/post.html">
+  <meta property="og:title" content="Review Du Lịch Quảng Trị | Explore Quảng Trị">
+  <meta property="og:description" content="Đọc review và kinh nghiệm du lịch Quảng Trị thực tế từ du khách.">
+  <meta property="og:image" content="https://khamphaquangtri.vn/images/og-cover.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Du lịch Quảng Trị – Explore Quảng Trị">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Review Du Lịch Quảng Trị | Explore Quảng Trị">
+  <meta name="twitter:description" content="Đọc review và kinh nghiệm du lịch Quảng Trị thực tế từ du khách.">
+  <meta name="twitter:image" content="https://khamphaquangtri.vn/images/og-cover.jpg">
+  <!-- Canonical -->
+  <link rel="canonical" href="https://khamphaquangtri.vn/post.html">
+  <!-- JSON-LD Schema -->
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "name": "Review Du Lịch Quảng Trị",
+  "url": "https://khamphaquangtri.vn/post.html",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Explore Quảng Trị",
+    "url": "https://khamphaquangtri.vn"
+  },
+  "about": {
+    "@type": "TouristDestination",
+    "name": "Quảng Trị",
+    "address": {"@type": "PostalAddress", "addressRegion": "Quảng Trị", "addressCountry": "VN"}
+  }
+}
+</script>
+  <!-- ═══ END SEO TAGS ════════════════════════════════════════ -->
 </head>
 <body class="page-normal">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5FL6FF42"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 
 <!-- ── HERO ── -->
 <div class="post-hero" id="postHero">
@@ -645,9 +702,22 @@ if (!post) {
     </div>`;
 } else {
 
-  /* ── Page meta ── */
-  document.getElementById('pageTitle').textContent = post.title + ' | Explore Quảng Trị';
+  /* ── Page meta + OG/Twitter (dynamic per post) ── */
+  const fullTitle = post.title + ' | Explore Quảng Trị';
+  document.getElementById('pageTitle').textContent = fullTitle;
   document.getElementById('pageDesc').setAttribute('content', post.excerpt);
+
+  /* Update OG & Twitter tags so sharing on Zalo/Facebook shows correct post */
+  const setMeta = (sel, attr, val) => { const el = document.querySelector(sel); if (el) el.setAttribute(attr, val); };
+  setMeta('meta[property="og:title"]',          'content', fullTitle);
+  setMeta('meta[property="og:description"]',    'content', post.excerpt);
+  setMeta('meta[property="og:image"]',          'content', post.img || 'https://khamphaquangtri.vn/images/og-cover.jpg');
+  setMeta('meta[property="og:url"]',            'content', location.href);
+  setMeta('meta[name="twitter:title"]',         'content', fullTitle);
+  setMeta('meta[name="twitter:description"]',   'content', post.excerpt);
+  setMeta('meta[name="twitter:image"]',         'content', post.img || 'https://khamphaquangtri.vn/images/og-cover.jpg');
+  setMeta('link[rel="canonical"]',              'href',    location.href);
+  setMeta('meta[name="keywords"]',              'content', (post.tags || []).join(', ') + ', du lịch Quảng Trị, tham quan Quảng Trị');
 
   /* ── Hero ── */
   const heroImg = document.getElementById('postHeroImg');

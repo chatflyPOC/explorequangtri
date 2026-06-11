@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- Trang chủ -->
+  <url>
+    <loc>https://khamphaquangtri.vn/</loc>
+    <lastmod>2025-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://khamphaquangtri.vn/"/>
+  </url>
+
+  <!-- Địa điểm du lịch -->
+  <url>
+    <loc>https://khamphaquangtri.vn/destinations.html</loc>
+    <lastmod>2025-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+
+  <!-- Lập kế hoạch / Lịch trình -->
+  <url>
+    <loc>https://khamphaquangtri.vn/itinerary.html</loc>
+    <lastmod>2025-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.90</priority>
+  </url>
+
+  <!-- Blog & Review -->
+  <url>
+    <loc>https://khamphaquangtri.vn/blog.html</loc>
+    <lastmod>2025-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Bài viết mẫu - Thành Cổ Quảng Trị -->
+  <url>
+    <loc>https://khamphaquangtri.vn/post.html?id=1</loc>
+    <lastmod>2025-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+
+  <!-- Bài viết - Địa đạo Vịnh Mốc -->
+  <url>
+    <loc>https://khamphaquangtri.vn/post.html?id=2</loc>
+    <lastmod>2025-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+
+  <!-- Bài viết - Biển Cửa Tùng -->
+  <url>
+    <loc>https://khamphaquangtri.vn/post.html?id=8</loc>
+    <lastmod>2025-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+
+  <!-- Bài viết - Hang Sơn Đoòng -->
+  <url>
+    <loc>https://khamphaquangtri.vn/post.html?id=4</loc>
+    <lastmod>2025-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+
+  <!-- Bài viết - 7 điều cần biết -->
+  <url>
+    <loc>https://khamphaquangtri.vn/post.html?id=6</loc>
+    <lastmod>2025-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+
+  <!-- Bài viết - Solo travel -->
+  <url>
+    <loc>https://khamphaquangtri.vn/post.html?id=7</loc>
+    <lastmod>2025-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+
+  <!-- Mẹo du lịch -->
+  <url>
+    <loc>https://khamphaquangtri.vn/tips.html</loc>
+    <lastmod>2025-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+
+  <!-- Dịch vụ -->
+  <url>
+    <loc>https://khamphaquangtri.vn/services.html</loc>
+    <lastmod>2025-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+
+  <!-- Bản đồ -->
+  <url>
+    <loc>https://khamphaquangtri.vn/map.html</loc>
+    <lastmod>2025-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.70</priority>
+  </url>
+
+</urlset>

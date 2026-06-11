@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /
+
+# Disallow admin / private paths (none currently, listed for future)
+Disallow: /admin/
+Disallow: /private/
+
+# Allow all major crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+# Sitemap
+Sitemap: https://khamphaquangtri.vn/sitemap.xml
