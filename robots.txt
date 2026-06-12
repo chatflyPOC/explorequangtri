@@ -16,4 +16,4 @@ User-agent: facebookexternalhit
 Allow: /
 
 # Sitemap
-Sitemap: https://khamphaquangtri.vn/sitemap.xml
+Sitemap: https://explorequangtri.com/sitemap.xml
